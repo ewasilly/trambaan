@@ -14,7 +14,8 @@ github cheatsheet
 git pull
 git add .
 git status
-git push
 git commit -m "message"
+git push
+
 
 We werken NIET met branches
