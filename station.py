@@ -2,7 +2,7 @@
 # Heuristieken / RailNL
 
 """
-In this script the Class Station will be defined.  Also all stations will be loaded.
+In this script the Class Station will be defined.
 """
 
 import csv
@@ -19,19 +19,28 @@ class Station():
     def __repr__(self):
         return(f"{self.id}, {self.name}, {self.critical}")
 
-def load_stations():
+
+
+
+
+"""
+Stations laden moet uiteindelijk in de main file denk ik. Maar het belang van deze class is voor nu een beetje onduidelijk
+Ook wat er in moet is nog onduidelijk.
+"""
+
+def load_stations(infile):
     """
     Loads stations from CSV file. Returns list containing station objects
     """
     stations = []
     # stations = [] kan ook weg als we voor dictionary kiezen
     stations_dict = {}
-    with open(STATIONS, 'r') as f:
+    with open(infile, 'r') as f:
         reader = csv.reader(f)
-        numbers = list(range(len(STATIONS)))
-        for row, number in zip(reader, numbers):
+        id = 0
+        for row in reader
             name = row[0]
-            id = number
+            id = id
             if row[3]:
                 critical = True
             else:
@@ -39,7 +48,8 @@ def load_stations():
             station = Station(name, id, critical)
             stations.append(station)
             stations_dict[id] = station
+            id += 1
     return(stations_dict)
 
 
-print(load_stations())
+print(load_stations(STATIONS))

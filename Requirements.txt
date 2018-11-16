@@ -1,0 +1,4 @@
+alle benodigde packages
+dit hele bestand runbaar zijn met:
+
+pip install -r requirements.t

@@ -2,8 +2,9 @@
 # Heuristieken / RailNL
 
 """
-In this script the Class Connection will be defined.  Also all connections will be loaded from CSV file.
+In this script the Class Connection will be defined.
 """
+
 
 import csv
 
@@ -12,24 +13,23 @@ CONNECTIONS= 'ConnectiesHolland.csv'
 STATIONS= "StationsHolland.csv"
 
 class Connection():
-    def __init__(self, station_1, station_2, duration):
+    def __init__(self, id_from, id_to, time):
         # self.id kan weggelaten worden als we voor id als dictionary keys kiezen
         self.id_from = id_from
         self.id_to= id_to
-        self.duration = duration
+        self.time = time
 
-    def is_critical = critical
 
     def __repr__(self):
-        return(f"{self.id_from} - {self.id_to}, duration:{duration} min")
+        return(f"{self.id_from}-{self.id_to}")
 
 
 
-def give_id():
+def give_id(infile):
     """
     Parses a csv file and returns a dictionary in the format [stationname]:id, and a list with critical ids.
     """
-    with open(STATIONS, 'r') as f:
+    with open(infile, 'r') as f:
         reader = csv.reader(f)
         stations_ids = {}
         critical_ids = []
@@ -42,43 +42,40 @@ def give_id():
                 critical_ids.append(id)
             id += 1
 
-        return(critical_ids)
+        return(stations_ids)
 
-
-print(give_id())
-
-
-def load_connections():
+# dictionary with [stationname]:id
+stations_ids = give_id(STATIONS)
 
 
 
-
-
-
-
-
-
-def load_connections():
+def load_connections(infile):
     """
-    Loads stations from CSV file. Returns list containing station objects
+    Loads all connections in connectiesHolland.csv as objects into a list
     """
-    stations = []
-    # stations = [] kan ook weg als we voor dictionary kiezen
-    stations_dict = {}
-    with open(STATIONS, 'r') as f:
+    all_connections = []
+    with open(infile, 'r') as f:
         reader = csv.reader(f)
-        numbers = list(range(len(STATIONS)))
-        for row, number in zip(reader, numbers):
-            name = row[0]
-            id = number
-            if row[3]:
-                critical = True
-            else:
-                critical = False
-            station = Station(name, id, critical)
-            stations.append(station)
-            stations_dict[id] = station
-    return(stations_dict)
+        for row in reader:
+            station_from = row[0]
+            station_to = row[1]
+            id_from = stations_ids[station_from]
+            id_to = stations_ids[station_to]
+            time = int(row[2])
+            connection = Connection(id_from, id_to, time)
+            all_connections.append(connection)
+
+    return(all_connections)
+
+all_connections = load_connections(CONNECTIONS)
 
 
-print(load_stations())
+
+# print(stations_ids)
+print(all_connections)
+
+
+for cn in all_connections:
+    print(cn.id_from)
+    print(cn.id_to)
+    print(cn.time)
