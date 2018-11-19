@@ -1,6 +1,19 @@
 Mijn Project
 [ Korte beschrijving van de RailNL case]
 
+Statespace:
+
+n = (s * c_1 * (c_2)^l)^t
+
+waarin
+n de totale statespace is
+s het aantal stations is
+c_1 het maximum aantal connecties is
+c_2 het maximum aantal connecties is als je niet terug reist
+l het aantal connecties dat maximaal in 2 uur past
+t het maximale aantal trajecten is
+
+
 Aan de slag (Getting Started)
 Vereisten (Prerequisites)
 Deze codebase is volledig geschreven in Python3.7
