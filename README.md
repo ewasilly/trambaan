@@ -3,14 +3,14 @@ Mijn Project
 
 Statespace:
 
-n = (s * c_1 * (c_2)^l)^t
+u = (s * c_1 * (c_2)^a_m)^t
 
 waarin
-n de totale statespace is
+u de upper bound is
 s het aantal stations is
 c_1 het maximum aantal connecties is
 c_2 het maximum aantal connecties is als je niet terug reist
-l het aantal connecties dat maximaal in 2 uur past
+a_m het aantal connecties dat maximaal in 2 uur past
 t het maximale aantal trajecten is
 
 
