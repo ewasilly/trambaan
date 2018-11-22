@@ -1,4 +1,7 @@
 alle benodigde packages
+- csv
+- random
+
 dit hele bestand runbaar zijn met:
 
 pip install -r requirements.t
