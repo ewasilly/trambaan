@@ -99,16 +99,29 @@ load_connections(CONNECTIONS)
 # print(f"Critical connections: {critical_connections}")
 
 
-# de test der Tests:
-# numbers = list(range(1000))
 
-# random.shuffle(numbers)
+"""
+Vanaf hier wordt er wat aangekloot met trajecten
+"""
+# create random array of numbers to use as indices in all_connections
+numbers = np.arange(100000)
+np.random.shuffle(numbers)
 
-
+# the length of all_connections can be used with modulo. More info later.
 len = len(all_connections)
-print(all_connections)
-first_traject = Traject(all_connections[7])
-for i in range(len):
-    first_traject.add_connection(all_connections[i])
+
+# generate a random number to use as starting connection in Traject
+start = np.random.randint(low=1, high=len)
+
+# Build a random Traject
+first_traject = Traject(all_connections[start])
+# Prevent going back and forth by keeping track of used indices
+used = []
+for i in numbers:
+    index = i%len
+    # using the Traject method add_connection, to add the connection at [i] in all_connections
+    # modulo is used to prevent "index out of range list" error.
+    first_traject.add_connection(all_connections[index])
+    used.append(index)
 print(first_traject)
 print(first_traject.total_time)
