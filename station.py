@@ -21,6 +21,6 @@ class Station():
 
 
 """
-Stations laden moet uiteindelijk in de main file denk ik. Maar het belang van deze class is voor nu een beetje onduidelijk
-Ook wat er in moet is nog onduidelijk.
+Stations laden moet uiteindelijk in de main file denk ik. Maar het belang van
+deze class is voor nu een beetje onduidelijk.
 """

@@ -1,4 +1,6 @@
-
+# Trambaan
+# Class Traject
+# Heuristieken 2018 UvA
 
 class Traject():
     def __init__(self, startconnection):
@@ -10,7 +12,7 @@ class Traject():
         # last connection in self.connections list:
         last_connection = self.connections[-1]
 
-        # if new_connection follow the last_connection, add it.
+        # if new_connection follows the last_connection, add it.
         if new_connection.id_from == last_connection.id_to:
             self.connections.append(new_connection)
             self.total_time += new_connection.time
