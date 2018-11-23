@@ -8,7 +8,11 @@ def traject_generator(connections, traject):
 
     # Nieuwe lijst met connecties verkrijgen
     id_new_station = self.traject.connections[-1]
-
+    for station in insert_stations_list:
+        if self.station.id == id_new_station:
+            # Moet in class station een lijst met de connecties daarvandaan hebben
+            # Hiermee dit updaten
+            connections =
 
     while self.traject.total_time < 120:
         if connections[0] in traject:
