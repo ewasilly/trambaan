@@ -1,6 +1,15 @@
 Mijn Project
 [ Korte beschrijving van de RailNL case]
 
+RailNL heeft recentelijk een doelfunctie opgesteld voor de kwaliteit van de lijnvoering. Als 100% van van de kritieke verbindingen bereden wordt, levert dat 10000 punten op je lijnvoering op, anders krijg je een een gedeelte daarvan. Maar hoe minder trajecten voor dezelfde service, hoe goedkoper. En in hoe minder tijd er in al die trajecten samen verbruikt wordt, hoe beter. Dus die factoren worden ook meegewogen in de doelfunctie:
+
+
+K = p*10000 - (T*20 + Min/10)
+
+waarin K de kwaliteit van de lijnvoering is, p de fractie van de bereden kritieke verbindingen (dus tussen 0 en 1), T het aantal trajecten en Min het aantal minuten in alle trajecten samen.
+
+
+
 Statespace:
 
 u = (s * c_1 * (c_2)^a_m)^t
