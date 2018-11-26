@@ -13,6 +13,12 @@ c_2 het maximum aantal connecties is als je niet terug reist
 a_m het aantal connecties dat maximaal in 2 uur past
 t het maximale aantal trajecten is
 
+l = c_crit
+
+waarin
+l de lower bound is
+c_crit het aantal kritieke connecties
+
 
 Aan de slag (Getting Started)
 Vereisten (Prerequisites)
