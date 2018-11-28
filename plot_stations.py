@@ -1,52 +1,37 @@
-CONNECTIONS = "ConnectiesHolland.csv"
-
-import csv
-import math
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from Connection import Connection
-from Connection import load_connections
+import networkx as nx
+STATIONS = 'StationsHolland.csv'
 
-# with open("ConnectiesHolland.csv") as f:
-#     reader = csv.reader(f)
-#     for row in reader:
-#         print(row)
-#
-# stationsnamen = []
-# x = []
-# y = []
-#
-# with open("ConnectiesHolland.csv") as g:
-#     reader = csv.reader(g)
-#     for row in reader:
-#         stationsnamen.append(row[0])
-#         x.append(row[1])
-#         y.append(row[2])
-#
-#
-#
-# for connection in connections:
-#     id_from = connection.id_from
-#     id_to = connection.id_to
-#     plt.plot()
+def average_minutes():
+    """
+    Isolates the coordinates of a station.
+    """
+    stations_ = []
+    with open(STATIONS, 'r') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            minutes_list.append(int(row[2]))
+    return np.mean(minutes_list)
 
+G=nx.Graph()
+G.add_node("a")
+G.add_nodes_from(["b","c"])
 
-# myplot = plt.plot(x, y)
-# plt.show()
+G.add_edge(1,2)
+edge = ("d", "e")
+G.add_edge(*edge)
+edge = ("a", "b")
+G.add_edge(*edge)
 
-all_connections = load_connections(CONNECTIONS)
-
-# print(stations_ids)
-print(all_connections)
-
-# stations_frame = pd.read_csv("StationsHolland.csv", header=None)
-# print(stations_frame)
-
-# stations_punten = np.linspace(0.0, (2 * np.pi), 22)
-
-# for i in stations_punten:
-#     plt.plot(np.cos(i), np.sin(i), 'ro')
-# plt.plot([np.cos(stations_punten[1]), np.sin(stations_punten[1])], [np.cos(stations_punten[6]), np.sin(stations_punten[6])])
-# # plt.axis([-1.1, 1.1, -1.1, 1.1])
-# plt.show()
+# Input: [(1,5), (8,4), ...]
+for i in G:
+    print(G[i])
+# adding a list of edges:
+G.add_edges_from([("a","c"),("c","d"), ("a",1), (1,"d"), ("a",2)])
+print(f"Nodes of graph: {G.nodes()}, so {G.number_of_nodes()} nodes.")
+print(f"Edges of graph: {G.edges()}, so {G.number_of_edges()} edges.")
+nx.draw(G)
+# plt.savefig("simple_path.png") # save as png
+# for i, name in enumerate(G.nodes()):
+#     plt.annotate(name, G.node["a"]['pos'])
+plt.show() # display
