@@ -1,37 +1,38 @@
+import csv
 import matplotlib.pyplot as plt
 import networkx as nx
-STATIONS = 'StationsHolland.csv'
+STATIONS = 'data/StationsHolland.csv'
 
-def average_minutes():
+def make_list_of_row():
     """
     Isolates the coordinates of a station.
     """
-    stations_ = []
+    stations = {}
     with open(STATIONS, 'r') as f:
         reader = csv.reader(f)
         for row in reader:
-            minutes_list.append(int(row[2]))
-    return np.mean(minutes_list)
+            stations[row[0]] = (row[1], row[2])
+    return stations
 
-G=nx.Graph()
-G.add_node("a")
-G.add_nodes_from(["b","c"])
 
-G.add_edge(1,2)
-edge = ("d", "e")
-G.add_edge(*edge)
-edge = ("a", "b")
-G.add_edge(*edge)
+def make_graph(dict_of_units):
+    """
+    Make a nice graph plot.
+    """
+    G = nx.Graph()
+    name_list = []
+    for i in dict_of_units.keys():
+        G.add_node(i, pos=dict_of_units[i])
 
-# Input: [(1,5), (8,4), ...]
-for i in G:
-    print(G[i])
-# adding a list of edges:
-G.add_edges_from([("a","c"),("c","d"), ("a",1), (1,"d"), ("a",2)])
-print(f"Nodes of graph: {G.nodes()}, so {G.number_of_nodes()} nodes.")
-print(f"Edges of graph: {G.edges()}, so {G.number_of_edges()} edges.")
-nx.draw(G)
-# plt.savefig("simple_path.png") # save as png
-# for i, name in enumerate(G.nodes()):
-#     plt.annotate(name, G.node["a"]['pos'])
-plt.show() # display
+    # # adding a list of edges:
+    # G.add_edges_from([("a","c"),("c","d"), ("a",1), (1,"d"), ("a",2)])
+    # print(f"Nodes of graph: {G.nodes()}, so {G.number_of_nodes()} nodes.")
+    # print(f"Edges of graph: {G.edges()}, so {G.number_of_edges()} edges.")
+    nx.draw(G, dict_of_units)
+    for i in dict_of_units.keys():
+        plt.annotate(i, G.node[i]['pos'])
+    plt.show() # display
+
+if __name__ == "__main__":
+    stations_list = make_list_of_row()
+    make_graph(stations_list)
