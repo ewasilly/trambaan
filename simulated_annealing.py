@@ -139,7 +139,6 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
     counter = collections.Counter(connections)
     # length of connections = the amount of possible connections
     length = len(connections)
-
     # keep track of critical connections used
     used_critical = []
     goal = len(critical_connections)
@@ -157,24 +156,26 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
         # keep track of tries, to use as break mechanism in case of dead ends
         stack_all = Stack(connections)
         stack_crit = Stack(critical_connections)
+        optie1 = 0
+        optie2 = 0
         while traject.total_time <= 120 and tries < 1000:
             first_c = stack_crit.take()
             first_a = stack_all.take()
             # first try adding a critical connection, if not yet in traject and not yet used more than 3 times
             if first_c not in traject.connections and counter[first_c] <= 3:
+                optie1+=1
                 traject.add_connection(first_c)
-                print(traject.connections, traject.total_time)
                 tries += 1
             # else try one from all connections
             elif first_a not in traject.connections and counter[first_a] <= 3:
                 traject.add_connection(first_a)
                 tries += 1
+                optie2 += 1
                 # print(f"A{first_a}")
             if tries >= 100:
                 # if the total time of the current traject exceeds min_time use this traject.
                 if traject.total_time >= min_time:
                     trajects[f"Traject {i}."] = traject
-                    print("BUAAH")
                     i += 1
                     # add connections in this traject to used_all, eventually the use through all 7 trajects will be counted
                     for conn in traject.connections:
@@ -187,9 +188,9 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
                             count_critical = len(collections.Counter(used_critical))
                             print(counter)
                     break
-            else:
-                break
+            
 
+    print(optie1, optie2)
 
     return(trajects)
 
@@ -227,18 +228,10 @@ def hillclimber(trajects):
     old_K = K_calculator(trajects)
 
 
+for i in range(100):
+    traject_generator_greedy(critical_connections, 7, 60)
 
-
-
-trajects = traject_generator_greedy(all_connections, 7, 60)
+trajects = traject_generator_greedy(critical_connections, 7, 60)
 print(trajects)
-
-
-
-
-
-
-
-
 # K de kwaliteit van de lijnvoering is, p de fractie van de bereden kritieke verbindingen (dus tussen 0 en 1),
 # T het aantal trajecten en Min het aantal minuten in alle trajecten samen.
