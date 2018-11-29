@@ -123,18 +123,21 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
 
     i = 1
     while i < nr_of_trajects:
+        random.shuffle(connections)
         # generate a random starting connection for the Traject
         start = random.choice(range(length))
         traject = Traject(connections[start])
-        tried = []
-        random.shuffle(connections)
         while traject.total_time <= 120:
+            tries = 1
+            random.shuffle(connections)
             for index in range(length):
                 # add connection if not yet in traject and not yet used more than 3 times
                 if connections[index] not in traject.connections and counter[connections[index]] <= 2:
                     traject.add_connection(connections[index])
+                    tries += 1
             # if the total time of the current traject overceeds min_time use this traject.
             if traject.total_time >= min_time:
+                print("BUAAA")
                 trajects[f"Traject {i}."] = (traject, traject.total_time)
                 total_minutes.append(traject.total_time)
                 i += 1
@@ -144,6 +147,8 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
                     counter = collections.Counter(used_all)
                     if conn in critical_connections:
                         used_critical.append(conn)
+                break
+            elif tries == 500:
                 break
             # if the traject is too short, start over.
             else:
@@ -167,12 +172,12 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
 
 
 K_distribution = []
-for i in range(500):
-    K = traject_generator_greedy(all_connections, 6, 60)
+for i in range(10):
+    K = traject_generator_greedy(all_connections, 6, 80)
     K_distribution.append(K)
 
 plt.hist(K_distribution, bins='auto')
-plt.title("K spread - 500 iterations - 5 trajects, min 50 minutes")
+plt.title("K spread - 500 iterations - 5 trajects, min 80 minutes")
 plt.show()
 
 
