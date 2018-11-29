@@ -146,48 +146,45 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
     count_critical = 0
 
     i = 0
-    while i < nr_of_trajects:
-        print(f"{i}\n\n\n")
+    tries = 0
+    while i < nr_of_trajects and tries < 1000:
         # prevent using the same order of presenting options
         random.shuffle(connections)
+
         # since already shuffled, take the first connection as starting point for the traject
         traject = Traject(connections[0])
-        print(traject)
-        # keep track of tries, to use as break mechanism in case of dead ends
-        tries = 0
 
+        # keep track of tries, to use as break mechanism in case of dead ends
         stack_all = Stack(connections)
         stack_crit = Stack(critical_connections)
-
-        while traject.total_time <= 120:
+        while traject.total_time <= 120 and tries < 1000:
             first_c = stack_crit.take()
             first_a = stack_all.take()
             # first try adding a critical connection, if not yet in traject and not yet used more than 3 times
             if first_c not in traject.connections and counter[first_c] <= 3:
                 traject.add_connection(first_c)
+                print(traject.connections, traject.total_time)
                 tries += 1
-                print(f"C{first_c}")
-                print(traject)
             # else try one from all connections
-            if first_a not in traject.connections and counter[first_a] <= 3:
+            elif first_a not in traject.connections and counter[first_a] <= 3:
                 traject.add_connection(first_a)
                 tries += 1
-                print(f"A{first_a}")
-            if tries == 100:
-                # if the total time of the current traject overceeds min_time use this traject.
+                # print(f"A{first_a}")
+            if tries >= 100:
+                # if the total time of the current traject exceeds min_time use this traject.
                 if traject.total_time >= min_time:
                     trajects[f"Traject {i}."] = traject
                     print("BUAAH")
                     i += 1
                     # add connections in this traject to used_all, eventually the use through all 7 trajects will be counted
                     for conn in traject.connections:
+                        print(conn)
                         used_all.append(conn)
                         counter = collections.Counter(used_all)
                         print(counter(first_c))
                         if conn in critical_connections:
                             used_critical.append(conn)
                             count_critical = len(collections.Counter(used_critical))
-                            print(counter)
                             print(counter)
                     break
             else:

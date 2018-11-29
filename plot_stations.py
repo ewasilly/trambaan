@@ -37,14 +37,8 @@ def make_graph(dict_of_units, list_of_connections):
         G.add_node(i, pos=dict_of_units[i])
 
     # adding a list of edge tuples:
-    print(type(list_of_connections), type(list_of_connections[0][0]))
     G.add_edges_from(list_of_connections)
-    print(f"Nodes of graph: {G.nodes()}, so {G.number_of_nodes()} nodes.")
-    print(f"Edges of graph: {G.edges()}, so {G.number_of_edges()} edges.")
-    print(dict_of_units)
     nx.draw_networkx(G, pos=dict_of_units)
-    # for i in dict_of_units.keys():
-    #     plt.annotate(i, G.node[i]['pos'])
     plt.show()
 
 
