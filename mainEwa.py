@@ -115,19 +115,14 @@ def traject_generator_depth(connections):
     # create random array of numbers to use for indexing through connections
     numbers = np.arange(10000)
     trajects = {}
-    # count the use of connections during all trajects
-    used_all = []
-    # keep track of total time, will be used in objective function
-    total_minutes = []
-    # keep track of used critical connections
-    used_critical = []
+
     # length of connections = the amount of stations in this list.
     length = len(stations_dict)
-
 
     # List to save the possible connections from a certain station
     possibilities = []
     possible_time = []
+    used_depth = []
 
     # generate a random number to use as starting station in Traject
     start = random.choice(range(length))
@@ -137,8 +132,12 @@ def traject_generator_depth(connections):
     i = 0
     time = 0
     while i < 1:
+        start = random.choice(range(length))
         # while loop to make one traject
         while time < 120:
+            print(f"start: {start}")
+            possibilities.clear()
+            possible_time.clear()
             # search for the possible connections from start
             for connection in all_connections:
                 # if start is starting point of a connection, add to possibilities
@@ -149,6 +148,9 @@ def traject_generator_depth(connections):
             for connection in possibilities:
                 possible_time.append(connection.time)
 
+            if len(possible_time) == 0:
+                break
+
             min_time = min(possible_time)
 
             for connection in possibilities:
@@ -157,21 +159,72 @@ def traject_generator_depth(connections):
                         traject = Traject(connection)
                         time = time + connection.time
                         start = connection.id_to
+                        used_depth.append(connection)
                     else:
                         traject.add_connection(connection)
                         time = time + connection.time
                         start = connection.id_to
+                        used_depth.append(connection)
+
+
+
+            print(f"possibilities: {possibilities}")
+            print(f"possible_time: {possible_time}")
+            print(f"min_time: {min_time}")
+            print(f"time: {time}")
+
 
             i += 1
 
-        print(f"possibilities: {possibilities}")
-        print(f"possible_time: {possible_time}")
-        print(f"min_time: {min_time}")
-        print(f"traject: {traject}")
+    # print(f"traject: {traject}")
+    return traject
 
-    return
 
-traject_generator_depth(all_connections)
+# assign the output of traject_generator_deph into new variable
+traject = traject_generator_depth(all_connections)
+#used_depth = traject_generator_depth(used_depth)
+print(f"traject: {traject}")
+
+connections_bt = []
+possibilities_bt = []
+
+
+# function for backtracking
+def backtrack(traject):
+    print(f"backtrack_connectie: {traject.connections[-1]}")
+    print(f"backtrack station: {traject.connections[-1].id_from}")
+    i = 0
+    #for i in range(len(traject - 1)):
+    for connection in all_connections:
+        # backtrack through traject
+        # search for other unvisited possible stations per station
+        if traject.connections[-2-i].id_from == connection.id_from:
+            connections_bt.append(traject.connections[-2-i].id_from)
+
+    for connections in traject:
+        print(connection)
+
+    #for connection in connections_bt:
+    #    if connection not in used_depth:
+    #        possibilities_bt.append(connection)
+
+
+#print(f"used depth: {used_depth}")
+print(f"connections_bt: {connections_bt}")
+print(f"possibilities_bt: {possibilities_bt}")
+
+
+
+
+
+    #for connection in all_connections:
+    #    if
+    #return
+
+backtrack(traject)
+
+
+
 
 
 
