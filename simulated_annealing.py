@@ -99,8 +99,8 @@ def load_connections(infile):
 
 # inladen connecties check:
 load_connections(CONNECTIONS)
-# print(f"All connections: {all_connections}\n")
-# print(f"Critical connections: {critical_connections}\n")
+print(f"All connections: {len(all_connections)}\n")
+print(f"Critical connections: {len(critical_connections)}\n")
 
 
 """
@@ -118,12 +118,16 @@ Create trajects
 class Stack():
     def __init__(self, array):
         self.array = array
-    #  takes first item and puts it last in the array
+    #  takes first item and puts it back at the end of the array
     def take(self):
         taken = self.array[0]
         self.array.pop(0)
         self.array.append(taken)
         return(taken)
+
+    def shuffle(self):
+        random.shuffle(self.array)
+
     def __repr__(self):
         return(f"{self.array}")
 
@@ -135,64 +139,57 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
     trajects = {}
     # keep track of used connections during all trajects
     used_all = []
-    # keep track of use of connections; first we start it for all possible connections
-    counter = collections.Counter(connections)
-    # length of connections = the amount of possible connections
-    length = len(connections)
     # keep track of critical connections used
     used_critical = []
+    # keep track of use of connections; first we start it for all possible connections
+    counter = collections.Counter(used_all)
+    # length of connections = the amount of possible connections
+    nr_all = len(connections)
     goal = len(critical_connections)
-    count_critical = 0
+
+    stack_all = Stack(connections)
+    stack_crit = Stack(critical_connections)
+
+
 
     i = 0
-    tries = 0
-    while i < nr_of_trajects and tries < 1000:
-        # prevent using the same order of presenting options
-        random.shuffle(connections)
+    while i < nr_of_trajects:
 
-        # since already shuffled, take the first connection as starting point for the traject
-        traject = Traject(connections[0])
+        traject = Traject(stack_all.take())
+        print(i)
+        print(traject)
+        tries = 0
 
-        # keep track of tries, to use as break mechanism in case of dead ends
-        stack_all = Stack(connections)
-        stack_crit = Stack(critical_connections)
-        optie1 = 0
-        optie2 = 0
-        while traject.total_time <= 120 and tries < 1000:
-            first_c = stack_crit.take()
-            first_a = stack_all.take()
-            # first try adding a critical connection, if not yet in traject and not yet used more than 3 times
-            if first_c not in traject.connections and counter[first_c] <= 3:
-                optie1+=1
-                traject.add_connection(first_c)
-                tries += 1
-            # else try one from all connections
-            elif first_a not in traject.connections and counter[first_a] <= 3:
-                traject.add_connection(first_a)
-                tries += 1
-                optie2 += 1
-                # print(f"A{first_a}")
-            if tries >= 100:
-                # if the total time of the current traject exceeds min_time use this traject.
-                if traject.total_time >= min_time:
-                    trajects[f"Traject {i}."] = traject
-                    i += 1
-                    # add connections in this traject to used_all, eventually the use through all 7 trajects will be counted
-                    for conn in traject.connections:
-                        print(conn)
-                        used_all.append(conn)
-                        counter = collections.Counter(used_all)
-                        print(counter(first_c))
-                        if conn in critical_connections:
-                            used_critical.append(conn)
-                            count_critical = len(collections.Counter(used_critical))
-                            print(counter)
-                    break
-            
+        while traject.total_time <= min_time:
 
-    print(optie1, optie2)
+            for conn in stack_crit.array:
+                if conn not in traject.connections:
+                    traject.add_connection(conn)
+                    tries +=1
 
-    return(trajects)
+            for conn in stack_all.array:
+                if conn not in traject.connections:
+                    traject.add_connection(conn)
+                    tries +=1
+
+            if traject.total_time >= min_time:
+                trajects[f"Traject {i}."]= (traject, traject.total_time)
+                stack_all.shuffle()
+                stack_crit.shuffle()
+                i += 1
+            else:
+                stack_all.shuffle()
+                stack_crit.shuffle()
+
+            if tries == 1000:
+                print("GHELLOOO")
+                break
+
+
+
+
+
+
 
 
 def K_calculator(trajects, all_connections, critical_connections):
@@ -228,10 +225,8 @@ def hillclimber(trajects):
     old_K = K_calculator(trajects)
 
 
-for i in range(100):
-    traject_generator_greedy(critical_connections, 7, 60)
-
-trajects = traject_generator_greedy(critical_connections, 7, 60)
-print(trajects)
+for i in range(1):
+    trajects = traject_generator_greedy(critical_connections, 7, 50)
+    print(trajects)
 # K de kwaliteit van de lijnvoering is, p de fractie van de bereden kritieke verbindingen (dus tussen 0 en 1),
 # T het aantal trajecten en Min het aantal minuten in alle trajecten samen.
