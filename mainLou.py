@@ -182,8 +182,6 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
     trajects ={}
 
     i = 1
-    # arbitrary :
-    min_time = 50
     while i < 7:
         # generate a random number to use as starting connection in Traject
         start = random.choice(range(length))
@@ -217,10 +215,39 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
                     break
 
 
+def K_calculator(trajects):
+
+    used_conns = []
+    used_crit = []
+    total_minutes = []
+    for traject in trajects:
+        total_minutes.append(traject.total_time)
+        for conn in traject:
+            used_conns.append(conn)
+            if conn in critical_connections:
+                used_crit.append(conn)
+
+    # f is eigenlijk alleen voor ons interessant, fractie gebruikte connecties
+    f= len(collections.Counter(used_conns))/len(all_connections)
+
+    p = len(collections.Counter(used_crit))/ len(critical_connections)
+    t = len(trajects.keys())
+    total_minutes = sum(total_minutes)
+    K = p*10000 - (t*20 + total_minutes/10)
+
+    print(f"Greedy approach trajects output: {trajects} \n")
+    print(f"Fraction: {f}\n")
+    print(p)
+    print(f"K: {K}\n")
+
+    return(K)
+
+
 
 K_distribution = []
 for i in range(50):
-    K = traject_generator_greedy(all_connections, 6, 70)
+    T = traject_generator_greedy(all_connections, 6, 70)
+    K= K_calculator(T)
     K_distribution.append(K)
 
 plt.hist(K_distribution, bins='auto')
