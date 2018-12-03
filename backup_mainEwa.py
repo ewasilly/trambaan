@@ -111,6 +111,7 @@ print(f"all connections[0].id_to: {all_connections[0].id_to}")
 traject = Traject
 # Note on connections; choose critical_connections OR all_connections
 def traject_generator_depth(connections):
+
     # create random array of numbers to use for indexing through connections
     numbers = np.arange(10000)
     trajects = {}
@@ -141,10 +142,13 @@ def traject_generator_depth(connections):
                 # if start is starting point of a connection, add to possibilities
                 if start == connection.id_from:
                     possibilities.append(connection)
-                    possible_time.append(connection.time)
+
 
             # search for the possible connection with the shortest time
-            if len(possibilities) == 0:
+            for connection in possibilities:
+                possible_time.append(connection.time)
+
+            if len(possible_time) == 0:
                 break
 
             min_time = min(possible_time)
@@ -160,91 +164,19 @@ def traject_generator_depth(connections):
                         time = time + connection.time
                         start = connection.id_to
 
-
-
             print(f"possibilities: {possibilities}")
             print(f"possible_time: {possible_time}")
             print(f"min_time: {min_time}")
             print(f"time: {time}")
 
-
             i += 1
 
-    # print(f"traject: {traject}")
-    return traject
+    #    print(f"traject: {traject}")
 
 
-# assign the output of traject_generator_deph into new variable
-traject = traject_generator_depth(all_connections)
-#used_depth = traject_generator_depth(used_depth)
-print(f"traject: {traject}")
+    return(traject)
 
-connections_bt = []
-possibilities_bt = []
-possible_time_bt = []
-used_depth = []
-
-
-# function for backtracking
-def backtrack(traject):
-    #i = 0
-    #for i in range(len(traject.connections) - 1):
-    connections_bt.clear()
-    possibilities_bt.clear()
-
-    for connection in traject.connections:
-        if connection not in used_depth:
-            used_depth.append(connection)
-
-    traject.connections.pop(len(traject.connections) - 1)
-    print(f"popped traject: {traject}")
-
-    for connection in all_connections:
-        # backtrack through traject
-        # search for other unvisited possible stations per station
-        if traject.connections[-1].id_from == connection.id_from:
-            connections_bt.append(connection)
-
-    print(f"connections_bt: {connections_bt}")
-
-    for connection in connections_bt:
-        print(connection)
-        if connection not in used_depth:
-            possibilities_bt.append(connection)
-
-    if len(possibilities_bt) == 0:
-        print(f"pre-popped traject: {traject}")
-        backtrack(traject)
-
-    # if the current station has unvisited stations, add these to possibilities
-    else:
-        traject_generator_deph(traject)
-
-
-    print(f"possibilities_bt: {possibilities_bt}")
-    print(f"possible_time_bt: {possible_time_bt}")
-
-
-    # determine which unvisited connection has the shortest time
-    #min_time = min(possible_time_bt)
-    #for connection in possibilities_bt:
-    #    if connection.time == min_time:
-    #        traject.add_connection(connection)
-
-    #if len(possible_time_bt) > 0:
-    #    min_time = min(possible_time_bt)
-
-
-#print(f"connections_bt: {connections_bt}")
-print(f"possibilities_bt: {possibilities_bt}")
-print(f"possible_time_bt: {possible_time_bt}")
-print(f"possible_time_bt: {possible_time_bt}")
-
-
-backtrack(traject)
-
-
-
+print(traject_generator_depth(all_connections))
 
 
 
