@@ -107,17 +107,10 @@ print(f"Critical connections: {len(critical_connections)}\n")
 Create trajects
 """
 
-# def count_critical(connections_array, critical_connections):
-#
-#     for conn in connections_array:
-#         if conn in critical_connections:
-#             used_crit.append(conn)
-#
-#     counter = collections.Counter(used_crit)
-#     return(len(counter))
 class Stack():
     def __init__(self, array):
         self.array = array
+
     #  takes first item and puts it back at the end of the array
     def take(self):
         taken = self.array[0]
@@ -125,86 +118,24 @@ class Stack():
         self.array.append(taken)
         return(taken)
 
-    def shuffle(self):
-        random.shuffle(self.array)
-
     def __repr__(self):
         return(f"{self.array}")
 
 
-# Note on connections; choose critical_connections OR all_connections
-def traject_generator_greedy(connections, nr_of_trajects, min_time):
-
-    # this will be the output dictionary
-    trajects = {}
-    # keep track of used connections during all trajects
-    used_all = []
-    # keep track of critical connections used
-    used_critical = []
-    # keep track of use of connections; first we start it for all possible connections
-    counter = collections.Counter(used_all)
-    # length of connections = the amount of possible connections
-    nr_all = len(connections)
-    goal = len(critical_connections)
-
-    stack_all = Stack(connections)
-    stack_crit = Stack(critical_connections)
-
-
-
-    i = 0
-    while i < nr_of_trajects:
-
-        traject = Traject(stack_all.take())
-        print(i)
-        print(traject)
-        tries = 0
-
-        while traject.total_time <= min_time:
-
-            for conn in stack_crit.array:
-                if conn not in traject.connections:
-                    traject.add_connection(conn)
-                    tries +=1
-
-            for conn in stack_all.array:
-                if conn not in traject.connections:
-                    traject.add_connection(conn)
-                    tries +=1
-
-            if traject.total_time >= min_time:
-                trajects[f"Traject {i}."]= (traject, traject.total_time)
-                stack_all.shuffle()
-                stack_crit.shuffle()
-                i += 1
-            else:
-                stack_all.shuffle()
-                stack_crit.shuffle()
-
-            if tries == 1000:
-                print("GHELLOOO")
-                break
-
-
-
-
-
-
-
-
-def K_calculator(trajects, all_connections, critical_connections):
+def K_calculator(trajects):
 
     used_conns = []
     used_crit = []
     total_minutes = []
-    for traject in trajects:
+    for key in trajects.keys():
+        traject = trajects[key]
         total_minutes.append(traject.total_time)
-        for conn in traject:
+        for conn in traject.connections:
             used_conns.append(conn)
             if conn in critical_connections:
                 used_crit.append(conn)
 
-    # f is eigenlijk alleen voor ons interessant, fractie gebruikte connecties
+    # fraction of used connections
     f= len(collections.Counter(used_conns))/len(all_connections)
 
     p = len(collections.Counter(used_crit))/ len(critical_connections)
@@ -212,21 +143,85 @@ def K_calculator(trajects, all_connections, critical_connections):
     total_minutes = sum(total_minutes)
     K = p*10000 - (t*20 + total_minutes/10)
 
-    print(f"Greedy approach trajects output: {trajects} \n")
-    print(f"Fraction: {f}\n")
-    print(p)
-    print(f"K: {K}\n")
+    print(f"F: {f}")
+    print(f"P: {p}\n")
+    print(f"K: {K}")
 
     return(K)
 
 
-def hillclimber(trajects):
-
-    old_K = K_calculator(trajects)
 
 
-for i in range(1):
-    trajects = traject_generator_greedy(critical_connections, 7, 50)
+'''
+This greedy_generator is a lot quicker than the other one. It generates quite high scores
+BUT if you examine the trajects with a high K score, a lot of overlap in use of connections is visible.
+This actually suggests that the objective function is not optimal.
+'''
+def greedy_generator_new(connections, nr_of_trajects, min_time):
+
+    # this will be the output dictionary
+    trajects = {}
+    # length of connections = the nr of connections
+    len_all = len(connections)
+    len_crit = len(critical_connections)
+
+    # build a stack to prevent to ensure use of all connections
+    stack_all = Stack(connections)
+    stack_crit = Stack(critical_connections)
+
+    def shuffle_stacks():
+        random.shuffle(stack_all.array)
+        random.shuffle(stack_crit.array)
+
+    i = 0
+    while i < nr_of_trajects:
+        shuffle_stacks()
+        start_connection = stack_all.take()
+        traject = Traject(start_connection)
+        # dictionary for this startconnection
+        tries = 0
+        rounds = 0
+
+        while tries < 1000:
+
+            time_before = traject.total_time
+            for j in range(len_crit):
+                traject.add_connection(stack_crit.take())
+                tries += 1
+                traject.add_connection(stack_all.take())
+                tries += 1
+            time_after = traject.total_time
+            rounds += 1
+            shuffle_stacks()
+
+            if time_after > min_time:
+                trajects[f"Traject{start_connection}-{traject.total_time}"]= traject
+                i += 1
+
+
+            # if connection is a dead end
+            if time_before == time_after:
+                break
+
+    return(trajects)
+
+
+
+all_trajects = {}
+K_distribution_newGreedy=[]
+for i in range(10):
+    trajects = greedy_generator_new(critical_connections, 7, 50)
     print(trajects)
-# K de kwaliteit van de lijnvoering is, p de fractie van de bereden kritieke verbindingen (dus tussen 0 en 1),
-# T het aantal trajecten en Min het aantal minuten in alle trajecten samen.
+    K = K_calculator(trajects)
+    K_distribution_newGreedy.append(K)
+    all_trajects[K]= trajects
+
+
+# plt.hist(K_distribution_newGreedy, bins='auto')
+# plt.title("K spread - 500 iterations - 6 trajects, min 40 minutes new")
+# plt.show()
+
+highest_k = max(K_distribution_newGreedy)
+print("BEST TRAJECT EVER")
+print(highest_k)
+print(all_trajects[highest_k])
