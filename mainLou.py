@@ -179,26 +179,28 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
     numbers = list(range(1000))
     # the length of all_connections can be used with modulo. More info later.
     length = len(connections)
-    trajects ={}
+    counter = collections.Counter(connections)
+    trajects = {}
+
 
     i = 1
-    while i < 7:
+    while i < nr_of_trajects:
         # generate a random number to use as starting connection in Traject
-        start = random.choice(range(length))
+        start = random.choice(numbers)%length
         traject = Traject(connections[start])
-        # # Prevent going back and forth by keeping track of used connections
-        # used = []
+
         tried = 1
         while traject.total_time <= 120:
             # modulo is used to prevent "index out of range list" error.
-            j = random.choice(numbers)
-            index = j % length
-            # using the Traject method add_connection, to add the connection at [j] in all_connections
-            if connections[index] not in traject.connections:
+            index = random.choice(numbers)%length
+
+            # using the Traject method add_connection, to add the connection at [index] in all_connections
+            if counter[connections[index]] <= 3:
                 traject.add_connection(connections[index])
                 tried += 1
-            # if every connection has been tried:
-            if tried == length:
+
+            # if
+            if tried == 2*length:
                 # if the total time of the current traject overceeds min_time use this traject.
                 if traject.total_time >= min_time:
                     trajects[f"Traject{i}."] = traject
@@ -213,21 +215,26 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
                 # if the traject is too short, start over.
                 else:
                     break
+    return(trajects)
+
+
 
 
 def K_calculator(trajects):
+    # werkt
 
     used_conns = []
     used_crit = []
     total_minutes = []
-    for traject in trajects:
+    for key in trajects.keys():
+        traject = trajects[key]
         total_minutes.append(traject.total_time)
-        for conn in traject:
+        for conn in traject.connections:
             used_conns.append(conn)
             if conn in critical_connections:
                 used_crit.append(conn)
 
-    # f is eigenlijk alleen voor ons interessant, fractie gebruikte connecties
+    # fraction of used connections
     f= len(collections.Counter(used_conns))/len(all_connections)
 
     p = len(collections.Counter(used_crit))/ len(critical_connections)
@@ -235,24 +242,32 @@ def K_calculator(trajects):
     total_minutes = sum(total_minutes)
     K = p*10000 - (t*20 + total_minutes/10)
 
-    print(f"Greedy approach trajects output: {trajects} \n")
-    print(f"Fraction: {f}\n")
-    print(p)
-    print(f"K: {K}\n")
+    print(f"F: {f}")
+    print(f"P: {p}\n")
+    print(f"K: {K}")
 
     return(K)
 
 
 
-K_distribution = []
-for i in range(50):
-    T = traject_generator_greedy(all_connections, 6, 70)
-    K= K_calculator(T)
+all_trajects = {}
+K_distribution=[]
+for i in range(500):
+    trajects = traject_generator_greedy(critical_connections, 6, 40)
+    print(trajects)
+    K = K_calculator(trajects)
     K_distribution.append(K)
+    all_trajects[K]= trajects
+
 
 plt.hist(K_distribution, bins='auto')
-plt.title("K spread - 50 iterations - 5 trajects, min 70 minutes")
+plt.title("K spread - 500 iterations - 4 trajects, min 40 minutes new")
 plt.show()
+
+highest_k = max(K_distribution)
+print("BEST lijnvoering EVER")
+print(highest_k)
+print(all_trajects[highest_k])
 
 
 # K de kwaliteit van de lijnvoering is, p de fractie van de bereden kritieke verbindingen (dus tussen 0 en 1),

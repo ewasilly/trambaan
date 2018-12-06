@@ -135,7 +135,7 @@ def traject_generator_depth(all_connections):
 
     s = 0
     # loop through stations
-    while s < 5:
+    while s < 8:
 
         pos_starts = []
         pos_times = []
@@ -167,37 +167,36 @@ def traject_generator_depth(all_connections):
         while traject.total_time < 120:
 
             last_id = traject.connections[-1].id_to
-            print(traject)
-            print(last_id)
 
             # search for the possible connections
             for connection in all_connections:
                 # if start is starting point of a connection, add to possibilities
-                if connection.id_from == last_id:
+                if connection.id_from == last_id
                     # print("Match")
                     possibilities.append(connection)
                     possible_time.append(connection.time)
 
 
             if len(possibilities) == 0:
-                trajects[f"P{start_connection}- child{c}"] = traject
+                trajects[f"S{s}- c{c}"] = traject
                 c += 1
 
                 if len(traject.connections) > 1:
                     print("BACKTRACKING: ...")
-                    traject.connections.pop()
+                    popped = traject.connections.pop()
                     print(traject)
-                    last_id = traject.connections[-1].id_to
-                    print("Last track INSIDE :")
-                    print(last_id)
+                    print(traject.last_id)
+                    print("last track INSIDE :")
                     print(last_track)
+                    possibilities.clear()
                     for track in last_track:
-                        if track not in used_depth:
+                        if track != popped:
                             possibilities.append(track)
                             possible_time.append(track.time)
                             c += 1
                             print("gotta use this one:")
                             print(track)
+
                 else:
                     print("nobacktrack")
                     c -= 1
@@ -205,15 +204,21 @@ def traject_generator_depth(all_connections):
                 # print("BACKTRACKING: .....")
                 # back_track(traject, last_track)
 
-            last_track = possibilities.copy()
 
             # add the shortest connection
             for connection in possibilities:
+                print("possibilities:")
+                print(connection)
                 if connection.time == min(possible_time):
-                    print("ADD")
+                    print("shortest:")
+                    print(connection)
                     traject.add_connection(connection)
-                    # print(traject)
+                    print(traject)
                     used_depth.append(connection)
+
+
+
+            last_track = possibilities.copy()
 
             possibilities.clear()
             possible_time.clear()

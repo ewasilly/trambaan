@@ -24,6 +24,7 @@ sys.path.insert(0, 'code/classes/')
 from station import Station
 from traject import Traject
 from connection import Connection
+import plot_stations
 
 
 STATIONS = 'data/StationsHolland.csv'
@@ -193,9 +194,10 @@ def traject_generator_greedy(connections, nr_of_trajects, min_time):
                             count_critical = len(collections.Counter(used_critical))
                             print(counter)
                     break
+    if len(traject.connections) > 3:
+        print(traject.connections)
 
-
-    print(optie1, optie2)
+    # print(optie1, optie2)
 
     return(trajects)
 
