@@ -131,7 +131,6 @@ def traject_generator_depth(connections):
     # generate a random number to use as starting station in Traject
     #start = random.choice(range(length))
     start = 2
-    dict_trajects = {}
 
     # Ensure that no more than 7 trajects are made
     # Don't forget to change 1 to 7!!!
@@ -171,24 +170,26 @@ def traject_generator_depth(connections):
                 if connection.time == min_time:
                     if i == 0:
                         traject = Traject(connection)
-                        # add station to dictionary
-                        name_key = stations_dict[connection.id_from][0]
-                        print(name_key)
-
                         time = time + connection.time
+                        start = connection.id_from
+                        stop = connection.id_to
+                        dict_temp2 = {}
+                        dict_temp = {stop: dict_temp2}
+                        dict = {start : dict_temp}
                         start = connection.id_to
                     else:
                         traject.add_connection(connection)
                         time = time + connection.time
-                        start = connection.id_to
-
+                        start = connection.id_from
+                        stop = connection.id_to
+                        start = stop
 
             i += 1
 
-
         print(f"traject: {traject}")
-        print(f"dict_trajects: {dict_trajects}")
         print(f"stations_dict: {stations_dict}")
+        print(f"dict: {dict}")
+
 
     return
 
