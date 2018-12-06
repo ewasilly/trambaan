@@ -14,6 +14,7 @@ Traject.py
 """
 
 import csv
+import copy
 import random
 import sys
 import numpy as np
@@ -141,11 +142,11 @@ def K_calculator(trajects):
     p = len(collections.Counter(used_crit))/ len(critical_connections)
     t = len(trajects.keys())
     total_minutes = sum(total_minutes)
-    K = p*10000 - (t*20 + total_minutes/10)
+    K = p*10000 - (t*20 + (total_minutes/10))
 
     print(f"F: {f}")
-    print(f"P: {p}\n")
-    print(f"K: {K}")
+    print(f"P: {p}")
+    print(f"K: {K}\n")
 
     return(K)
 
@@ -153,14 +154,14 @@ def K_calculator(trajects):
 
 
 '''
-This traject generator creates an arbitrary nr of trajects and returns a traject_database (dictionary)
-The key is defined as startconnection - total_time. This way, the same trajects will be overwritten
-resulting in no duplicates in the traject database
+This traject generator creates an arbitrary amount of trajects and returns a traject_database (dictionary)
+The key is contains startconnection and total_time. This way, trajects that are identical will be overwritten
+resulting in no duplicates in the traject database.
 '''
 def traject_generator_new(connections, nr_of_trajects, min_time):
 
     # this will be the output dictionary
-    trajects = {}
+    trajects_db = {}
     # length of connections = the nr of connections
     len_all = len(connections)
     len_crit = len(critical_connections)
@@ -195,62 +196,78 @@ def traject_generator_new(connections, nr_of_trajects, min_time):
             shuffle_stacks()
 
             if time_after > min_time:
-                trajects[f"Traject{start_connection}-{traject.total_time}"]= traject
+                trajects_db[f"Traject{start_connection}-{traject.total_time}"]= traject
                 i += 1
-
 
             # if connection is a dead end
             if time_before == time_after:
                 break
 
-    return(trajects)
+    return(trajects_db)
 
 
-# changing_set is used to specify which traject will be changed
-def hillclimber(startset, trajects_db, changing_set):
 
-    old_K = K_calculator(startset)
-    print(f"old_K: {old_K}")
+"""""
+This hillclimber takes a startset with an arbitrary amount of trajects, aswell as a trajects database.
+It takes a traject from the database and evaluates the effect of adding it into a temporary copy of the startset.
+You can specify how much trajects you maximally want in the final set.
+If adding an extra traject to your startset results in a higher K value. This change will be accepted aswell.
 
+"""""
+def hillclimber(startset, trajects_database, trajects_max):
+
+    # create a stack of the trajects database
     possible_trajects = list(trajects_db.values())
     stack = Stack(possible_trajects)
+    change_index = 0
 
-    for i in range(len(possible_trajects)):
-        new_traject = stack.take()
-        tempset = startset.copy()
-        tempset[index]= new_traject
-        new_K = K_calculator(tempset)
-        if new_K > old_K:
-            print(f"new_K: {new_K}")
-            startset = tempset
+    # changes will be tried at all indices
+    while change_index < trajects_max:
+
+        random.shuffle(stack.array)
+
+        for i in range(len(possible_trajects)):
+
+            # calculate the old K
+            old_K = K_calculator(startset)
+            # take a traject from the stack
+            new_traject = stack.take()
+            # create a copy of the startset where in the new_traject will be added.
+            tempset = copy.copy(startset)
+            # change traject at change_index, or add traject to startset if change_index not yet in startset.
+            tempset[change_index] = new_traject
+            # calculate new K
+            new_K = K_calculator(tempset)
+            # if the change results in higher K update startset
+            if new_K > old_K:
+                print("updating")
+                startset = tempset
+            # after all trajects where tried as a change, go try changing the next index
+            change_index += 1
 
     final_set = startset
 
     return(final_set)
 
 
-trajects_db = traject_generator_new(critical_connections, 1000, 40)
+#  Create a trajects database
+trajects_db = traject_generator_new(all_connections, 100, 60)
+# print(trajects_db)
 
-startset = {}
-for i in range(7):
+#  create a starting set of 3 trajects to use for the hillclimber
+start_set = {}
+for i in range(3):
     traject = list(trajects_db.values())[i]
-    startset[i]= traject
-print(f"len trajects db: {len(trajects_db)}")
-print(f"startset{startset}")
-
-K_set = {}
-for k in range(20):
-    new_set = hillclimber(startset, trajects_db, 0)
-    print(f"new_set: {new_set}")
-    K = K_calculator(new_set)
-    K_set[K] = new_set
+    start_set[i] = traject
 
 
 
+final = hillclimber(start_set, trajects_db, 7)
 
-recursive_set = hillclimber(startset, trajects_db)
-
-
+print(f"finalset = {final}")
+print(K_calculator(final))
+print(f"start_set = {start_set}")
+print(K_calculator(start_set))
 
 
 
