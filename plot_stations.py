@@ -40,8 +40,9 @@ def make_graph(dict_of_crits, dict_of_not, list_of_connections):
 
     # adding a list of edge tuples:
     G.add_edges_from(list_of_connections)
-    nx.draw_networkx(G, pos=dict_of_crits, node_color = 'b')
+    # nx.draw_networkx(G, pos=dict_of_crits, node_color = 'b')
     nx.draw_networkx(G, pos=dict_of_not, node_color = 'r')
+    plt.title("K-waarde hier")
     plt.show()
 
 
