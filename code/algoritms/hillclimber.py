@@ -1,11 +1,14 @@
 
 """""
+
 This hillclimber takes a startset with an arbitrary amount of trajects, aswell as a trajects database.
 It takes a traject from the database and evaluates the effect of adding it into a temporary copy of the startset.
 You can specify how much trajects you maximally want in the final set.
 If adding an extra traject to your startset results in a higher K value. This change will be accepted aswell.
 
 """""
+import helpers as hp
+
 def hillclimber(startset, trajects_database, trajects_max):
 
     # create a stack of the trajects database
@@ -16,14 +19,14 @@ def hillclimber(startset, trajects_database, trajects_max):
     # changes will be tried at all indices
     while change_index < trajects_max:
 
-        random.shuffle(stack.array)
+        random.shuffle(hp.stack.array)
 
         for i in range(len(possible_trajects)):
 
             # calculate the old K
             old_K = K_calculator(startset)
             # take a traject from the stack
-            new_traject = stack.take()
+            new_traject = hp.stack.take()
             # create a copy of the startset where in the new_traject will be added.
             tempset = copy.copy(startset)
             # change traject at change_index, or add traject to startset if change_index not yet in startset.

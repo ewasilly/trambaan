@@ -7,6 +7,8 @@ The current script:
 >>> defines K_calculator()
     >>>>> Is able to call the algoritms in the folder trambaan/code/algoritms
 
+
+hieronder staat nu breadth first van wuter
 """
 
 import csv
@@ -151,10 +153,58 @@ def K_calculator(trajects):
     return(K)
 
 
+def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajects, min_time):
+
+    # this will be the output dictionary
+    trajects_db = {}
+    # length of connections = the nr of connections
+    len_all = len(connections)
+    len_crit = len(critical_connections)
+
+    # build a stack to prevent to ensure use of all connections
+    stack_all = Stack(connections)
+    stack_crit = Stack(critical_connections)
+
+    def shuffle_stacks():
+        random.shuffle(stack_all.array)
+        random.shuffle(stack_crit.array)
+
+    i = 0
+    while i < nr_of_trajects:
+        shuffle_stacks()
+        start_connection = stack_all.take()
+        traject = Traject(start_connection)
+        # dictionary for this startconnection
+        tries = 0
+        rounds = 0
+
+        while tries < 1000:
+
+            time_before = traject.total_time
+            for j in range(len_crit):
+                traject.add_connection(stack_crit.take())
+                tries += 1
+                traject.add_connection(stack_all.take())
+                tries += 1
+            time_after = traject.total_time
+            rounds += 1
+            shuffle_stacks()
+
+            if time_after > min_time:
+                trajects_db[f"Traject{start_connection}-{traject.total_time}"]= traject
+                i += 1
+
+            # if connection is a dead end
+            if time_before == time_after:
+                break
+
+    return(trajects_db)
+
 
 #  Create a trajects database
-trajects_db = traject_generator_Greedy_new(all_connections, critical_connections, 100, 60)
+trajects_db = traject_generator_Greedy_new(all_connections, critical_connections, 10000, 1)
 print(trajects_db)
+print(len(trajects_db))
 
 #  create a starting set of 3 trajects to use for the hillclimber
 start_set = {}
@@ -165,7 +215,7 @@ for i in range(3):
 
 final = hillclimber(start_set, trajects_db, 7)
 
-print(f"finalset = {final}")
-print(K_calculator(final))
-print(f"start_set = {start_set}")
-print(K_calculator(start_set))
+# print(f"finalset = {final}")
+# print(K_calculator(final))
+# print(f"start_set = {start_set}")
+# print(K_calculator(start_set))

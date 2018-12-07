@@ -1,6 +1,6 @@
-""""
+"""
 backup voor als we dit kwijtraken. WEeet nog niet echt waar het moet.
-""""
+"""
 
 
 class Stack():
