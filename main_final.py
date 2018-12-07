@@ -1,16 +1,12 @@
 """
-main.py
->>> Moet alle Connections en Stations inladen
->>> Moet  stations_ids,  all_connections,  critical_connections  lists declareren
->>>>> Bevat het algoritme om trajecten mee op te bouwen. (depth-first?????)
-        >>>> Dit moet in main omdat het al het bovenstaande nodig heeft.
+The current script:
 
-Station.py
->>> bevat de class Station
-Connection.py
->>> bevat de class Connection
-Traject.py
->>> bevat de class traject
+>>> Loads in all Connections en Stations
+>>> Declares the lists: stations_ids,  all_connections,  critical_connections
+>>> defines the class Stack()
+>>> defines K_calculator()
+    >>>>> Is able to call the algoritms in the folder trambaan/code/algoritms
+
 """
 
 import csv
@@ -19,16 +15,20 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import collections
+import copy
 
 sys.path.insert(0, 'code/classes/')
 from station import Station
 from traject import Traject
 from connection import Connection
+sys.path.insert(1, 'code/algoritms/')
+from greedy import traject_generator_Greedy_new
+from hillclimber import hillclimber
+
 
 
 STATIONS = 'data/StationsHolland.csv'
 CONNECTIONS = 'data/ConnectiesHolland.csv'
-
 
 # Dictionary {id: Stationobject}
 stations_dict = {}
@@ -68,14 +68,8 @@ def load_stations(infile):
 
     return(stations_dict)
 
-
-
-# inladen stations check:
 stations_dict = load_stations(STATIONS)
-# print(f"stationsdict: {stations_dict}")
-# print(f"critical ids: {critical_ids}")
 
-print(name_id_dict)
 
 
 def load_connections(infile):
@@ -106,11 +100,13 @@ def load_connections(infile):
 
 # inladen connecties check:
 load_connections(CONNECTIONS)
-print(f"All connections: {all_connections}")
-print(f"Critical connections: {critical_connections}")
+# print(f"All connections: {len(all_connections)}\n")
+# print(f"Critical connections: {len(critical_connections)}\n")
 
 
-
+"""
+Stack and K_calculator definitions
+"""
 
 class Stack():
     def __init__(self, array):
@@ -146,53 +142,30 @@ def K_calculator(trajects):
     p = len(collections.Counter(used_crit))/ len(critical_connections)
     t = len(trajects.keys())
     total_minutes = sum(total_minutes)
-    K = p*10000 - (t*20 + (total_minutes/10))
+    K = p*10000 - (t*20 + total_minutes/10)
 
     print(f"F: {f}")
-    print(f"P: {p}")
-    print(f"K: {K}\n")
+    print(f"P: {p}\n")
+    print(f"K: {K}")
 
     return(K)
 
 
 
+#  Create a trajects database
+trajects_db = traject_generator_Greedy_new(all_connections, critical_connections, 100, 60)
+print(trajects_db)
 
-"""
-Create routes
-"""
-# create random array of numbers to use as indices in all_connections
-numbers = np.arange(10000)
-np.random.shuffle(numbers)
-
-# the length of all_connections can be used with modulo. More info later.
-len = len(critical_connections)
-
-# generate a random number to use as starting connection in Traject
-start = np.random.randint(low=1, high=len)
-print(f"startconnectie is: {start}")
-
-# Build a random Traject
-traject = Traject(critical_connections[start])
-# Prevent going back and forth by keeping track of used indices
-length_used = 0
-used = []
-
-for i in range(7):
-    for j in numbers:
-        # modulo is used to prevent "index out of range list" error.
-        index = j % len
-        # using the Traject method add_connection, to add the
-        # connection at [j] in all_connections
-        traject.add_connection(critical_connections[index])
-        if critical_connections[index] not in used:
-            used.append(critical_connections[index])
-            length_used += 1
-    if length_used == len:
-        break
+#  create a starting set of 3 trajects to use for the hillclimber
+start_set = {}
+for i in range(3):
+    traject = list(trajects_db.values())[i]
+    start_set[i] = traject
 
 
-print(f"used: {used}")
-print(f"len: {len}")
+final = hillclimber(start_set, trajects_db, 7)
 
-print(f"Critical connections route: {traject}")
-print(f"Total time critical connections route: {traject.total_time}")
+print(f"finalset = {final}")
+print(K_calculator(final))
+print(f"start_set = {start_set}")
+print(K_calculator(start_set))
