@@ -29,6 +29,7 @@ from hillclimber_basic import hillclimber
 from hillclimber_SA import hillclimber_SA
 from breadthfirst import traject_generator_BF
 from helpers import *
+from plot_stations import all_plot
 
 
 STATIONS = 'data/StationsHolland.csv'
@@ -161,7 +162,8 @@ trajects_db = traject_generator_BF(all_connections)
 # print(trajects_db)
 # print(len(trajects_db))
 
-traject_voor_jasper = trajects_db[60]
+traject_voor_jasper = list(trajects_db.values())[60]
+all_plot(traject_voor_jasper.connections)
 #
 # #  create a starting set of 3 trajects to use for the hillclimber
 # start_set = {}
