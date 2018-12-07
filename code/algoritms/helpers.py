@@ -1,7 +1,7 @@
 """
 backup voor als we dit kwijtraken. WEeet nog niet echt waar het moet.
 """
-
+import collections
 
 class Stack():
     def __init__(self, array):
@@ -20,7 +20,7 @@ class Stack():
 
 
 
-def K_calculator(trajects):
+def K_calculator(trajects, critical_connections, all_connections):
 
     used_conns = []
     used_crit = []

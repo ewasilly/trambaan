@@ -5,6 +5,8 @@ The key is contains startconnection and total_time. This way, trajects that are 
 resulting in no duplicates in the traject database.
 '''
 
+import helpers as h
+
 def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajects, min_time):
 
     # this will be the output dictionary

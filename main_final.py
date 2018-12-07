@@ -25,8 +25,10 @@ from traject import Traject
 from connection import Connection
 sys.path.insert(1, 'code/algoritms/')
 from greedy import traject_generator_Greedy_new
-from hillclimber import hillclimber
-
+from hillclimber_basic import hillclimber
+from hillclimber_SA import hillclimber_SA
+from breadthfirst import traject_generator_BF
+from helpers import *
 
 
 STATIONS = 'data/StationsHolland.csv'
@@ -106,53 +108,6 @@ load_connections(CONNECTIONS)
 # print(f"Critical connections: {len(critical_connections)}\n")
 
 
-"""
-Stack and K_calculator definitions
-"""
-
-class Stack():
-    def __init__(self, array):
-        self.array = array
-
-    #  takes first item and puts it back at the end of the array
-    def take(self):
-        taken = self.array[0]
-        self.array.pop(0)
-        self.array.append(taken)
-        return(taken)
-
-    def __repr__(self):
-        return(f"{self.array}")
-
-
-def K_calculator(trajects):
-
-    used_conns = []
-    used_crit = []
-    total_minutes = []
-    for key in trajects.keys():
-        traject = trajects[key]
-        total_minutes.append(traject.total_time)
-        for conn in traject.connections:
-            used_conns.append(conn)
-            if conn in critical_connections:
-                used_crit.append(conn)
-
-    # fraction of used connections
-    f= len(collections.Counter(used_conns))/len(all_connections)
-
-    p = len(collections.Counter(used_crit))/ len(critical_connections)
-    t = len(trajects.keys())
-    total_minutes = sum(total_minutes)
-    K = p*10000 - (t*20 + total_minutes/10)
-
-    print(f"F: {f}")
-    print(f"P: {p}\n")
-    print(f"K: {K}")
-
-    return(K)
-
-
 def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajects, min_time):
 
     # this will be the output dictionary
@@ -202,20 +157,51 @@ def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajec
 
 
 #  Create a trajects database
-trajects_db = traject_generator_Greedy_new(all_connections, critical_connections, 10000, 1)
-print(trajects_db)
-print(len(trajects_db))
+trajects_db = traject_generator_BF(all_connections)
+# print(trajects_db)
+# print(len(trajects_db))
 
-#  create a starting set of 3 trajects to use for the hillclimber
-start_set = {}
-for i in range(3):
-    traject = list(trajects_db.values())[i]
-    start_set[i] = traject
-
-
-final = hillclimber(start_set, trajects_db, 7)
-
+traject_voor_jasper = trajects_db[60]
+#
+# #  create a starting set of 3 trajects to use for the hillclimber
+# start_set = {}
+# for i in range(5):
+#     traject = list(trajects_db.values())[i]
+#     start_set[i] = traject
+#
+# final = hillclimber(start_set, trajects_db, 7, 1000, critical_connections, all_connections)
+#
 # print(f"finalset = {final}")
-# print(K_calculator(final))
+# print(K_calculator(final, critical_connections, all_connections))
 # print(f"start_set = {start_set}")
-# print(K_calculator(start_set))
+# print(K_calculator(start_set, critical_connections, all_connections))
+
+# K_dist = []
+# for j in range(10):
+#
+#     #  create a starting set of 3 trajects to use for the hillclimber
+#     start_set = {}
+#     for i in range(3):
+#         traject = list(trajects_db.values())[i]
+#         start_set[i] = traject
+#
+#     final = hillclimber(start_set, trajects_db, 7, 1000, critical_connections, all_connections)
+#     print(final)
+#     K = K_calculator(final, critical_connections, all_connections)
+#     K_dist.append(K)
+#
+#
+#
+#
+# plt.hist(K_dist, bins=50)
+# plt.title("K spread Stochastic hillclimber - 1000 iterations - startset 3 trajects")
+# plt.show()
+
+
+
+
+#
+# with open('linevoering.csv', 'w') as f:
+#     w = csv.DictWriter(f, fieldnames=final.keys())
+#     w.writeheader()
+#     w.writerow(final)
