@@ -36,6 +36,7 @@ def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajec
 
             time_before = traject.total_time
             for j in range(len_crit):
+                # Look at traject add_connection >> this is where the greedy aspect comes in
                 traject.add_connection(stack_crit.take())
                 tries += 1
                 traject.add_connection(stack_all.take())

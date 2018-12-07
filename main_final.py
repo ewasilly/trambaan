@@ -158,25 +158,25 @@ def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajec
 
 
 #  Create a trajects database
-trajects_db = traject_generator_BF(all_connections)
+trajects_db = traject_generator_Greedy_new(all_connections, critical_connections, 1000, 7)
 # print(trajects_db)
 # print(len(trajects_db))
 
 traject_voor_jasper = list(trajects_db.values())[60]
 all_plot(traject_voor_jasper.connections)
-#
-# #  create a starting set of 3 trajects to use for the hillclimber
-# start_set = {}
-# for i in range(5):
-#     traject = list(trajects_db.values())[i]
-#     start_set[i] = traject
-#
-# final = hillclimber(start_set, trajects_db, 7, 1000, critical_connections, all_connections)
-#
-# print(f"finalset = {final}")
-# print(K_calculator(final, critical_connections, all_connections))
-# print(f"start_set = {start_set}")
-# print(K_calculator(start_set, critical_connections, all_connections))
+
+#  create a starting set of 3 trajects to use for the hillclimber
+start_set = {}
+for i in range(5):
+    traject = list(trajects_db.values())[i]
+    start_set[i] = traject
+
+final = hillclimber(start_set, trajects_db, 7, 1000, critical_connections, all_connections)
+
+print(f"finalset = {final}")
+print(K_calculator(final, critical_connections, all_connections))
+print(f"start_set = {start_set}")
+print(K_calculator(start_set, critical_connections, all_connections))
 
 # K_dist = []
 # for j in range(10):

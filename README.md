@@ -46,6 +46,8 @@ These can be installed easily via the following pip command in your terminal:
 
 **pip install -r requirements.txt**
 
+also pip install networkx
+
 
 ### Structure
 All Python scripts are located in the folder **code**, as well as the script for assessment of the objective function.
