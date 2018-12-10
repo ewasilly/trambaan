@@ -6,15 +6,15 @@ STATIONS = 'data/StationsHolland.csv'
 CONNECTIONS = 'data/ConnectiesHolland.csv'
 
 
-def fix_input(stat_dict, traject_of_ids):
+def fix_input(stat_dict, traject_conns):
     """
-    Takes a list of ids of connections used in a traject and switches it to
-    the names, so make_graph works on it.
+    Takes a traject (so a list of class connections) and switches it to
+    the names of the stations, so make_graph works on it.
     """
 
     output_list = []
 
-    for conn in traject_of_ids:
+    for conn in traject_conns:
         conn = (conn.id_from, conn.id_to)
         for id, stat in enumerate(stat_dict.keys()):
             if id == conn[0]:
@@ -59,6 +59,7 @@ def make_graph(dict_of_stations, list_of_connections):
 
     # adding a list of edge tuples:
     G.add_edges_from(list_of_connections)
+    print(dict_of_stations)
     nx.draw_networkx(G, pos=dict_of_stations, node_color = 'r')
     plt.title("K-waarde hier")
     plt.show()
