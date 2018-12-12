@@ -30,7 +30,7 @@ from hillclimber_basic import hillclimber
 from hillclimber_SA import hillclimber_SA
 from breadthfirst import traject_generator_BF
 from helpers import Stack, K_calculator, get_trajects_from_csv
-from plot_stations import all_plot
+from plot_stations import traj_plot
 
 
 STATIONS_NH = 'data/StationsHolland.csv'
@@ -43,52 +43,60 @@ CONNECTIONS_NL = 'data/ConnectiesNationaal.csv'
 NH = Map(STATIONS_NH, CONNECTIONS_NH)
 NH.load_stations()
 NH.load_connections()
-print(NH.all_connections)
 
 NL = Map(STATIONS_NL, CONNECTIONS_NL)
 NL.load_stations()
 NL.load_connections()
-print(NL.stations_dict)
-print(NL.all_connections)
+
+
 
 
 
 #  Create a trajects database and save as csv
 trajects_db = traject_generator_BF(NH.all_connections, 120)
 
-
-with open('alltrajectsNH120.csv', 'w') as f:
-    w = csv.DictWriter(f, fieldnames=trajects_db.keys())
-    w.writeheader()
-    w.writerow(trajects_db)
+tr = list(trajects_db.values())[80]
+traj_plot(tr, NH)
 
 
-#  Create a trajects database for NL and save as csv
-trajects_db_NL = traject_generator_BF(NL.all_connections, 180)
 
-
-with open('alltrajectsNL180.csv', 'w') as f:
-    w = csv.DictWriter(f, fieldnames=trajects_db_NL.keys())
-    w.writeheader()
-    w.writerow(trajects_db_NL)
+#
+# with open('alltrajectsNH120.csv', 'w') as f:
+#     w = csv.DictWriter(f, fieldnames=trajects_db.keys())
+#     w.writeheader()
+#     w.writerow(trajects_db)
+#
+#
+# #  Create a trajects database for NL and save as csv
+# trajects_db_NL = traject_generator_BF(NL.all_connections, 180)
+#
+#
+# with open('alltrajectsNL180.csv', 'w') as f:
+#     w = csv.DictWriter(f, fieldnames=trajects_db_NL.keys())
+#     w.writeheader()
+#     w.writerow(trajects_db_NL)
 
 
 
 # NH = 'alltrajectsNH120.csv'
 # NL = 'alltrajectsNL180.csv'
 # trajects_list_NH = get_trajects_from_csv(NH)
-# # print(trajects_list)
+# print(trajects_list)
 # print(len(trajects_list_NH))
-#
+
 # print("HERKENNNEEN")
 # print(trajects_list_NH[0])
 # print(trajects_list_NH[130])
-#
-#
-# traject_list_NL = get_trajects_from_csv(NL)
+
+
+# trajects_list_NL = get_trajects_from_csv(NL)
 # print("NEDERLAND WHOEHOOO")
-# print(trajects_list_NH[0])
-# print(trajects_list_NH[130])
+# print(trajects_list_NL[58])
+# print(type(trajects_list_NL[500]))
+
+
+
+
 
 #
 # #  create a starting set of 15 trajects to use for the hillclimber

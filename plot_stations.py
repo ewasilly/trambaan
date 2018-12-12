@@ -101,7 +101,7 @@ def traj_plot(tr, map):
 
     # Create station name: coordinates dict
     coordinates_dict = {}
-    for station in map.stations_dict:
+    for station in list(map.stations_dict.values()):
         coordinates_dict[station.name] = station.coordinates
 
     conn_plot_list = []
