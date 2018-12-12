@@ -13,12 +13,12 @@ import random
 import copy
 
 
-def hillclimber(startset, trajects_database, max_nr_of_trajects, iterations, critical_connections, connections):
+def hillclimber(startset, max_nr_of_trajects, trajects_database, iterations, critical_connections, connections):
 
     # create a stack of the trajects database
     possible_trajects = list(trajects_database.values())
     stack = h.Stack(possible_trajects)
-
+    random.shuffle(stack.array)
     indices = list(range(max_nr_of_trajects))
 
     i = 0

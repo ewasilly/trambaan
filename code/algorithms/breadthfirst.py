@@ -6,7 +6,7 @@ import helpers as h
 from code.classes.traject import Traject
 import copy
 
-def traject_generator_BF(connections):
+def traject_generator_BF(connections, max_minutes):
 
     # this will be the output dictionary
     trajects_db = {}
@@ -46,10 +46,13 @@ def traject_generator_BF(connections):
                 new_traject = copy.deepcopy(traject)
                 # try to add every possible connection to this traject (one "breadth" iteration)
                 new_traject.add_connection(connections[j])
-                # add this new traject to the temporary traject database with its unique key
-                temp_trajects_db[f"Traject{new_traject.visited_ids}-{new_traject.total_time}"] = new_traject
-
-                j += 1
+                if new_traject.total_time > max_minutes:
+                    j += 1
+                else:
+                    # add this new traject to the temporary traject database with its unique key
+                    temp_trajects_db[f"Traject{new_traject.visited_ids}-{new_traject.total_time}"] = new_traject
+                    print(new_traject.total_time)
+                    j += 1
 
 
         if len(trajects_db) == len(temp_trajects_db):

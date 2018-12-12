@@ -23,35 +23,53 @@ sys.path.insert(0, 'code/classes/')
 from station import Station
 from traject import Traject
 from connection import Connection
-from map import Ruimte
+from map import Map
 sys.path.insert(1, 'code/algorithms/')
 from greedy import traject_generator_Greedy_new
 from hillclimber_basic import hillclimber
 from hillclimber_SA import hillclimber_SA
 from breadthfirst import traject_generator_BF
-from helpers import *
+from helpers import Stack, K_calculator
 from plot_stations import all_plot
 
 
-STATIONS = 'data/StationsHolland.csv'
-CONNECTIONS = 'data/ConnectiesHolland.csv'
+STATIONS_NH = 'data/StationsHolland.csv'
+CONNECTIONS_NH = 'data/ConnectiesHolland.csv'
+
+STATIONS_NL = 'data/StationsNationaal.csv'
+CONNECTIONS_NL = 'data/ConnectiesNationaal.csv'
 
 
-nederland = ()
+# NH = Map(STATIONS_NH, CONNECTIONS_NH)
+# NH.load_stations()
+# NH.load_connections()
+# print(NH.all_connections)
 
-NH = Ruimte('data/StationsHolland.csv', 'data/ConnectiesHolland.csv')
-NH.load_stations()
-NH.load_connections()
-print(NH.all_connections)
+NL = Map(STATIONS_NL, CONNECTIONS_NL)
+NL.load_stations()
+NL.load_connections()
+print(NL.stations_dict)
+print(NL.all_connections)
+
+
+#  Create a trajects database
+trajects_db = traject_generator_BF(NL.all_connections, 180)
+print(trajects_db)
+print(len(trajects_db))
+
+
+#  create a starting set of 15 trajects to use for the hillclimber
+start_set = {}
+for i in range(15):
+    traject = list(trajects_db.values())[-1 -i]
+    start_set[i] = traject
+
+
+hillclimber(start_set, 20, trajects_db, 1000, NL.critical_connections, NL.all_connections)
 
 
 
-#
-# #  Create a trajects database
-# trajects_db = traject_generator_Greedy_new(all_connections, critical_connections, 1000, 7)
-# # print(trajects_db)
-# # print(len(trajects_db))
-#
+
 # traject_voor_jasper = list(trajects_db.values())[61]
 # all_plot(traject_voor_jasper.connections)
 #
@@ -88,12 +106,3 @@ print(NH.all_connections)
 # plt.hist(K_dist, bins=50)
 # plt.title("K spread Stochastic hillclimber - 1000 iterations - startset 3 trajects")
 # plt.show()
-
-
-
-
-#
-# with open('linevoering.csv', 'w') as f:
-#     w = csv.DictWriter(f, fieldnames=final.keys())
-#     w.writeheader()
-#     w.writerow(final)

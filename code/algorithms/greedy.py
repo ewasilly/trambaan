@@ -6,6 +6,8 @@ resulting in no duplicates in the traject database.
 '''
 
 import helpers as h
+import random
+from code.classes.traject import Traject
 
 def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajects, min_time):
 
@@ -16,8 +18,8 @@ def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajec
     len_crit = len(critical_connections)
 
     # build a stack to prevent to ensure use of all connections
-    stack_all = Stack(connections)
-    stack_crit = Stack(critical_connections)
+    stack_all = h.Stack(connections)
+    stack_crit = h.Stack(critical_connections)
 
     def shuffle_stacks():
         random.shuffle(stack_all.array)

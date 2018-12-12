@@ -6,7 +6,7 @@ import csv
 from station import Station
 from connection import Connection
 
-class Ruimte():
+class Map():
     def __init__(self, csv_stations, csv_connections):
         # Dictionary {id: Stationobject}
         self.stations_dict = {}
@@ -35,9 +35,10 @@ class Ruimte():
             for row in reader:
                 name = row[0]
                 # check whether station is critical
-                if row[3]:
-                    critical = True
-                    self.critical_ids.append(id)
+                if len(row) > 3:
+                    if row[3]:
+                        critical = True
+                        self.critical_ids.append(id)
                 else:
                     critical = False
                 # create station with all attributes
@@ -60,7 +61,7 @@ class Ruimte():
                 # Hoorn
                 name_to = row[1]
                 # 24
-                time = int(row[2])
+                time = int(float(row[2]))
                 # Find the id of these stations:
                 id_from = self.name_id_dict[name_from]
                 id_to = self.name_id_dict[name_to]
