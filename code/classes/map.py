@@ -34,6 +34,7 @@ class Map():
             id = 0
             for row in reader:
                 name = row[0]
+                coordinates = (row[1], row[2])
                 # check whether station is critical
                 if len(row) > 3:
                     if row[3]:
@@ -42,7 +43,7 @@ class Map():
                 else:
                     critical = False
                 # create station with all attributes
-                station = Station(name, id, critical)
+                station = Station(name, id, critical, coordinates)
                 # add station to dictionary
                 self.stations_dict[id] = station
                 self.name_id_dict[name] = id

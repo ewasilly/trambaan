@@ -58,17 +58,20 @@ trajects_db = traject_generator_BF(NL.all_connections, 180)
 print(trajects_db)
 print(len(trajects_db))
 
+with open('alltrajectsNL180.csv', 'w') as f:
+    w = csv.DictWriter(f, fieldnames=trajects_db.keys())
+    w.writeheader()
+    w.writerow(trajects_db)
+
 
 #  create a starting set of 15 trajects to use for the hillclimber
 start_set = {}
-index_range = range(len(trajects_db))
-random.shuffle(range)
 for i in range(15):
-    traject = list(trajects_db.values())[index_range[i]]
+    traject = list(trajects_db.values())[random.randint(len(trajects_db))]
     start_set[i] = traject
 
 
-hillclimber(start_set, 20, trajects_db, 1000, NL.critical_connections, NL.all_connections)
+hillclimber(start_set, 20, trajects_db, 100000, NL.critical_connections, NL.all_connections)
 
 
 
