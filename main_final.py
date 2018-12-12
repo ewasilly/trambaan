@@ -120,7 +120,7 @@ trajects_db = traject_generator_Greedy_new(all_connections, critical_connections
 # print(trajects_db)
 # print(len(trajects_db))
 
-traject_voor_jasper = list(trajects_db.values())[60]
+traject_voor_jasper = list(trajects_db.values())[61]
 all_plot(traject_voor_jasper.connections)
 
 #  create a starting set of 3 trajects to use for the hillclimber
