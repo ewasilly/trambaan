@@ -97,7 +97,7 @@ def traj_plot(tr, map):
     map is which Map is used.
     """
 
-    list_of_connections = tr.connections
+    list_of_connections = tr
 
     # Create station name: coordinates dict
     coordinates_dict = {}
