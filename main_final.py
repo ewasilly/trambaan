@@ -23,7 +23,7 @@ sys.path.insert(0, 'code/classes/')
 from station import Station
 from traject import Traject
 from connection import Connection
-sys.path.insert(1, 'code/algoritms/')
+sys.path.insert(1, 'code/algorithms/')
 from greedy import traject_generator_Greedy_new
 from hillclimber_basic import hillclimber
 from hillclimber_SA import hillclimber_SA
