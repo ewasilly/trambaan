@@ -19,7 +19,6 @@ def hillclimber(startset, max_nr_of_trajects, trajects_database, iterations, cri
     possible_trajects = list(trajects_database.values())
     stack = h.Stack(possible_trajects)
     random.shuffle(stack.array)
-    indices = list(range(max_nr_of_trajects))
 
     i = 0
 
@@ -27,7 +26,7 @@ def hillclimber(startset, max_nr_of_trajects, trajects_database, iterations, cri
 
         random.shuffle(indices)
         # index for which traject in the set will be changed
-        change_index = indices[0]
+        change_index = iterations%max_nr_of_trajects
 
         # calculate the old K
         old_K = h.K_calculator(startset, critical_connections, connections)

@@ -52,6 +52,7 @@ print(NL.stations_dict)
 print(NL.all_connections)
 
 
+
 #  Create a trajects database
 trajects_db = traject_generator_BF(NL.all_connections, 180)
 print(trajects_db)
@@ -60,8 +61,10 @@ print(len(trajects_db))
 
 #  create a starting set of 15 trajects to use for the hillclimber
 start_set = {}
+index_range = range(len(trajects_db))
+random.shuffle(range)
 for i in range(15):
-    traject = list(trajects_db.values())[-1 -i]
+    traject = list(trajects_db.values())[index_range[i]]
     start_set[i] = traject
 
 
