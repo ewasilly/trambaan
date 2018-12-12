@@ -1,12 +1,14 @@
 # Louise
 # Heuristieken / RailNL
 
-"""
-In this script the Class Connection will be defined.
-"""
-
+# In this script the Class Connection will be defined.
 
 class Connection():
+    """
+    Is the connection between two stations.
+    id_from and id_to are station ids
+    time is the time it takes between the two stations
+    """
     def __init__(self, id_from, id_to, time):
         # self.id kan weggelaten worden als we voor id als dictionary keys kiezen
         self.id_from = id_from
