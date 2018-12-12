@@ -53,10 +53,10 @@ NL.load_connections()
 
 
 #  Create a trajects database and save as csv
-trajects_db = traject_generator_BF(NH.all_connections, 120)
-
-tr = list(trajects_db.values())[80]
-traj_plot(tr, NH)
+trajects_db = traject_generator_BF(NL.all_connections, 180)
+i = len(trajects_db)//2
+tr = list(trajects_db.values())[i]
+traj_plot(tr, NL, i)
 
 
 

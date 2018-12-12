@@ -5,6 +5,7 @@
 import csv
 import matplotlib.pyplot as plt
 import networkx as nx
+import numpy as np
 
 STATIONS = 'data/StationsHolland.csv'
 CONNECTIONS = 'data/ConnectiesHolland.csv'
@@ -90,19 +91,21 @@ def make_list_of_row():
     return stations
 
 
-def traj_plot(tr, map):
+def traj_plot(tr, map, traject_nr):
     """
     Plots a traject object.
-    tr is the traject (class Traject) that you want to be plotted.
-    map is which Map is used.
+    tr is the traject (class Traject) that you want to be plotted,
+    map is which Map is used,
+    traject_nr is which traject you're plotting (for title)
     """
 
-    list_of_connections = tr
+    list_of_connections = list(tr.connections)
 
     # Create station name: coordinates dict
     coordinates_dict = {}
     for station in list(map.stations_dict.values()):
-        coordinates_dict[station.name] = station.coordinates
+        coordinates_dict[station.name] = (float(station.coordinates[1]),
+                                          float(station.coordinates[0]))
 
     conn_plot_list = []
     for conn in list_of_connections:
@@ -116,7 +119,10 @@ def traj_plot(tr, map):
     # adding a list of edge tuples:
     G.add_edges_from(conn_plot_list)
     nx.draw_networkx(G, pos=coordinates_dict, node_color = 'r')
-    plt.title("K-waarde hier")
+    plt.title(f"Traject {traject_nr}")
+    plt.xlabel("Breedtegraad")
+    plt.ylabel("Lengtegraad")
+    plt.rcParams['axes.facecolor'] = 'green'
     plt.show()
 
 
