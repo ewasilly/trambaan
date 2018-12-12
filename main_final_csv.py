@@ -40,32 +40,49 @@ STATIONS_NL = 'data/StationsNationaal.csv'
 CONNECTIONS_NL = 'data/ConnectiesNationaal.csv'
 
 
-# NH = Map(STATIONS_NH, CONNECTIONS_NH)
-# NH.load_stations()
-# NH.load_connections()
-# print(NH.all_connections)
+NH = Map(STATIONS_NH, CONNECTIONS_NH)
+NH.load_stations()
+NH.load_connections()
 
-NL = Map(STATIONS_NL, CONNECTIONS_NL)
-NL.load_stations()
-NL.load_connections()
-# print(NL.stations_dict)
-# print(NL.all_connections)
+# NL = Map(STATIONS_NL, CONNECTIONS_NL)
+# NL.load_stations()
+# NL.load_connections()
+# # print(NL.stations_dict)
+# # print(NL.all_connections)
 
 
 def get_trajects_from_csv(trajects_db_csv):
     """
-    This function reads a csv file containing all possible trajects.
-    This is way quicker than creating the trajects_db everytime with the breadthfirst traject_generator.
+    This function reads a csv file containing all possible trajects and returns all trajects as a list without keys.
+    This is way we can get quicker access to the trajects database than by creating the trajects_db everytime with
+    the breadthfirst traject_generator algorithm.
     """
-    trajects_list = []
+    csv_output = []
     with open(trajects_db_csv, newline='') as c:
         reader = csv.reader(c)
         for row in reader:
             traject = row
-            trajects_list.append(traject)
+            csv_output.append(traject)
 
+    # keys = csv_output[0]
+    trajects_list = csv_output[1]
 
     return(trajects_list)
+
+
+#
+# #  Create a trajects database
+# trajects_db = traject_generator_BF(NH.all_connections, 120)
+# print(trajects_db)
+# print(len(trajects_db))
+#
+#
+#
+# with open('alltrajectsNL180.csv', 'w') as f:
+#     w = csv.DictWriter(f, fieldnames=trajects_db.keys())
+#     w.writeheader()
+#     w.writerow(trajects_db)
+#
 
 
 INFILE = 'alltrajectsNL180.csv'
@@ -73,12 +90,15 @@ INFILE = 'alltrajectsNL180.csv'
 trajects_list = get_trajects_from_csv(INFILE)
 # print(trajects_list)
 print(len(trajects_list))
+
+print("HERKENNNEEN")
+
 print(trajects_list[0])
-print(trajects_list[1])
+print(trajects_list[10])
+
+print(trajects_list[206])
 
 
-
-print(trajects_list[0][1000])
 
 
 

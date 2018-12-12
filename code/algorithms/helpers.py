@@ -2,6 +2,7 @@
 backup voor als we dit kwijtraken. WEeet nog niet echt waar het moet.
 """
 import collections
+import csv
 
 class Stack():
     def __init__(self, array):
@@ -46,3 +47,23 @@ def K_calculator(trajects, critical_connections, all_connections):
     print(f"K: {K}\n")
 
     return(K)
+
+
+
+def get_trajects_from_csv(trajects_db_csv):
+    """
+    This function reads a csv file containing all possible trajects and returns all trajects as a list without keys.
+    This is way we can get quicker access to the trajects database than by creating the trajects_db everytime with
+    the breadthfirst traject_generator algorithm.
+    """
+    csv_output = []
+    with open(trajects_db_csv, newline='') as c:
+        reader = csv.reader(c)
+        for row in reader:
+            traject = row
+            csv_output.append(traject)
+
+    # keys = csv_output[0]
+    trajects_list = csv_output[1]
+
+    return(trajects_list)
