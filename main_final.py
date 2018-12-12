@@ -35,6 +35,10 @@ from plot_stations import all_plot
 STATIONS = 'data/StationsHolland.csv'
 CONNECTIONS = 'data/ConnectiesHolland.csv'
 
+# this will be input "csv_files" for the Map() class
+noordholland = (STATIONS, CONNECTIONS)
+nederland = ()
+
 # Dictionary {id: Stationobject}
 stations_dict = {}
 # Dictionary {name : id}
@@ -109,52 +113,6 @@ load_connections(CONNECTIONS)
 # print(f"Critical connections: {len(critical_connections)}\n")
 
 
-def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajects, min_time):
-
-    # this will be the output dictionary
-    trajects_db = {}
-    # length of connections = the nr of connections
-    len_all = len(connections)
-    len_crit = len(critical_connections)
-
-    # build a stack to prevent to ensure use of all connections
-    stack_all = Stack(connections)
-    stack_crit = Stack(critical_connections)
-
-    def shuffle_stacks():
-        random.shuffle(stack_all.array)
-        random.shuffle(stack_crit.array)
-
-    i = 0
-    while i < nr_of_trajects:
-        shuffle_stacks()
-        start_connection = stack_all.take()
-        traject = Traject(start_connection)
-        # dictionary for this startconnection
-        tries = 0
-        rounds = 0
-
-        while tries < 1000:
-
-            time_before = traject.total_time
-            for j in range(len_crit):
-                traject.add_connection(stack_crit.take())
-                tries += 1
-                traject.add_connection(stack_all.take())
-                tries += 1
-            time_after = traject.total_time
-            rounds += 1
-            shuffle_stacks()
-
-            if time_after > min_time:
-                trajects_db[f"Traject{start_connection}-{traject.total_time}"]= traject
-                i += 1
-
-            # if connection is a dead end
-            if time_before == time_after:
-                break
-
-    return(trajects_db)
 
 
 #  Create a trajects database
