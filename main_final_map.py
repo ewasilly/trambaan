@@ -67,7 +67,7 @@ with open('alltrajectsNL180.csv', 'w') as f:
 #  create a starting set of 15 trajects to use for the hillclimber
 start_set = {}
 for i in range(15):
-    traject = list(trajects_db.values())[random.randint(len(trajects_db))]
+    traject = list(trajects_db.values())[random.randint(0, len(trajects_db))]
     start_set[i] = traject
 
 

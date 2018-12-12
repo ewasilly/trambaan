@@ -24,7 +24,6 @@ def hillclimber(startset, max_nr_of_trajects, trajects_database, iterations, cri
 
     while i < iterations:
 
-        random.shuffle(indices)
         # index for which traject in the set will be changed
         change_index = iterations%max_nr_of_trajects
 
