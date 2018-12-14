@@ -35,9 +35,14 @@ def traj_plot(tr, map, traject_nr):
 
     # Create station name: coordinates dict
     coordinates_dict = {}
+    critical_dict = {}
     for station in list(map.stations_dict.values()):
-        coordinates_dict[station.name] = (float(station.coordinates[1]),
-                                          float(station.coordinates[0]))
+        if station.critical == True:
+            critical_dict[station.name] = (float(station.coordinates[1]),
+                                           float(station.coordinates[0]))
+        else:
+            coordinates_dict[station.name] = (float(station.coordinates[1]),
+                                              float(station.coordinates[0]))
 
     conn_plot_list = []
     if isinstance(tr, list):
@@ -53,7 +58,8 @@ def traj_plot(tr, map, traject_nr):
     G = nx.Graph()
 
     # Adding all stations, plotting
-    G.add_nodes_from(coordinates_dict, color='b')
+    G.add_nodes_from(coordinates_dict)
+    nx.draw_networkx(G, pos=critical_dict, node_color='b')
     if plot_multiple == True:
         # Plot each traject in random color
         for traj_plot_list in conn_plot_list:

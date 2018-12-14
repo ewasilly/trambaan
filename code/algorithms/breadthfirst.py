@@ -7,7 +7,7 @@ def traject_generator_BF(map, max_minutes):
     This traject generator uses a breadth first approach to generate all
     possible trajects with the given connections.
     """
-    connections = map.all_connections 
+    connections = map.all_connections
     # this will be the output dictionary
     trajects_db = {}
     # length of connections = the nr of connections
@@ -48,7 +48,6 @@ def traject_generator_BF(map, max_minutes):
                     j += 1
                 else:
                     # add this new traject to the temporary traject database with its unique key
-                    print(new_traject)
                     temp_trajects_db[f"Traject{new_traject.visited_ids}-{new_traject.total_time}"] = new_traject
                     j += 1
 
