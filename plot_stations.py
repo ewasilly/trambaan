@@ -1,105 +1,37 @@
 # Team Trambaan
 # Made for the course Heuristieken
-# This file contains some functions that you could use to plot trajects
+# This file containsa funtion that plots a traject
 
-import csv
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-
-STATIONS = 'data/StationsHolland.csv'
-CONNECTIONS = 'data/ConnectiesHolland.csv'
+import random
 
 
-def all_plot(traj):
+def make_plottable(tr, map, plot_list):
     """
-    Combines some other functions to make a plot of a traject, i.e. a list of
-    connections. The connections need to be in the format (id_from, id_to).
-    """
-
-    stations_dict = make_list_of_row()
-    connections_list = isolate_connections()
-    traj = fix_input(stations_dict, traj)
-    make_graph(stations_dict, traj)
-
-
-def fix_input(stat_dict, traject_conns):
-    """
-    Takes a traject (so a list of connection objects) and switches it to
-    the names of the stations, so make_graph works on it.
-    stat_dict is {station name: coordinates} with all stations
-    traject_conns is a list of connection objects
+    This function takes all connections from tr and adds them to plot_list.
+    tr is a Traject object
+    plot_list is a list of connections
     """
 
-    conn_names_list = []
+    list_of_connections = list(tr.connections)
 
-    # Take a connection, isolate the stations from and to
-    for conn in traject_conns:
-        conn = (conn.id_from, conn.id_to)
-        # Switch id to name
-        for id, stat in enumerate(stat_dict.keys()):
-            if id == conn[0]:
-                station_from = stat
-            if id == conn[1]:
-                station_to = stat
-
-        # Make uple of the names and append to list
-        tuple_of_conn = (station_from, station_to)
-        conn_names_list.append(tuple_of_conn)
-
-    return conn_names_list
-
-
-def isolate_connections():
-    """
-    Isolates connections from the ConnectiesHolland file.
-    """
-
-    reader = csv.reader(open(CONNECTIONS, 'r'))
-    connections = []
-    for row in reader:
-        connections.append((row[0], row[1]))
-    return connections
-
-
-def make_graph(dict_of_stations, list_of_connections):
-    """
-    Make a graph plot.
-    """
-
-    G = nx.Graph()
-
-    # adding a list of edge tuples:
-    G.add_edges_from(list_of_connections)
-    nx.draw_networkx(G, pos=dict_of_stations, node_color = 'r')
-    plt.title("K-waarde hier")
-    plt.show()
-
-
-def make_list_of_row():
-    """
-    Isolates the coordinates of a station.
-    """
-
-    stations = {}
-    with open(STATIONS, 'r') as f:
-        reader = csv.reader(f)
-        # Make tuple of coordinates
-        for row in reader:
-            stations[row[0]] = (float(row[2]), float(row[1]))
-
-    return stations
+    for conn in list_of_connections:
+        # Retrieve stations, save names
+        stat_from = map.stations_dict[conn.id_from].name
+        stat_to = map.stations_dict[conn.id_to].name
+        plot_list.append((stat_from, stat_to))
 
 
 def traj_plot(tr, map, traject_nr):
     """
     Plots a traject object.
-    tr is the traject (class Traject) that you want to be plotted,
+    tr is either the traject (class Traject) that you want to be plotted or a
+    list of multiple trajects
     map is which Map is used,
     traject_nr is which traject you're plotting (for title)
     """
-
-    list_of_connections = list(tr.connections)
 
     # Create station name: coordinates dict
     coordinates_dict = {}
@@ -108,21 +40,33 @@ def traj_plot(tr, map, traject_nr):
                                           float(station.coordinates[0]))
 
     conn_plot_list = []
-    for conn in list_of_connections:
-        # Retrieve stations, save names
-        stat_from = map.stations_dict[conn.id_from].name
-        stat_to = map.stations_dict[conn.id_to].name
-        conn_plot_list.append((stat_from, stat_to))
+    if isinstance(tr, list):
+        plot_multiple = True
+        for traj in tr:
+            new_plot_list = []
+            make_plottable(traj, map, new_plot_list)
+            conn_plot_list.append(new_plot_list)
+    else:
+        plot_multiple = False
+        make_plottable(tr, map, conn_plot_list)
 
     G = nx.Graph()
 
-    # adding a list of edge tuples:
-    G.add_edges_from(conn_plot_list)
-    nx.draw_networkx(G, pos=coordinates_dict, node_color = 'r')
+    # Adding all stations, plotting
+    G.add_nodes_from(coordinates_dict, color='b')
+    if plot_multiple == True:
+        # Plot each traject in random color
+        for traj_plot_list in conn_plot_list:
+            color = "#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+            nx.draw_networkx(G, pos=coordinates_dict, edgelist=traj_plot_list,
+                             with_labels=False, node_size=20, edge_color = color,
+                             width=3)
+    else:
+        nx.draw_networkx(G, pos=coordinates_dict, edgelist=conn_plot_list,
+                         with_label=False, node_size=20, width=3)
     plt.title(f"Traject {traject_nr}")
     plt.xlabel("Breedtegraad")
     plt.ylabel("Lengtegraad")
-    plt.rcParams['axes.facecolor'] = 'green'
     plt.show()
 
 
