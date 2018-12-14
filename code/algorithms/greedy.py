@@ -2,13 +2,16 @@ import helpers as h
 import random
 from code.classes.traject import Traject
 
-def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajects, min_time):
+def traject_generator_greedy(map, iterations, min_time):
     """
-    This traject generator creates an arbitrary amount of trajects and returns
-    a traject_database (dictionary). The key is a startconnection and
-    total_time. This way, trajects that are identical will be overwritten
+    This traject generator creates an arbitrary amount of trajects of a minimal time duration
+    and returns a traject_database (dictionary).
+    The key is a startconnection and total_time. This way, trajects that are identical will be overwritten
     resulting in no duplicates in the traject database.
     """
+    connections = map.all_connections
+    critical_connections = map.critical_connections
+
     # this will be the output dictionary
     trajects_db = {}
     # length of connections = the nr of connections
@@ -24,7 +27,7 @@ def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajec
         random.shuffle(stack_crit.array)
 
     i = 0
-    while i < nr_of_trajects:
+    while i < iterations:
         shuffle_stacks()
         start_connection = stack_all.take()
         traject = Traject(start_connection)

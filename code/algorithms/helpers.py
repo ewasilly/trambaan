@@ -1,6 +1,7 @@
 """
-backup voor als we dit kwijtraken. WEeet nog niet echt waar het moet.
+All helping functions
 """
+
 import collections
 import csv
 
@@ -25,7 +26,7 @@ class Stack():
 
 def K_calculator(trajects, critical_connections, all_connections):
     """
-    Calculates the K-value of a given combination of trajectories
+    Calculates the K-value of a given set of trajectories
     """
 
     used_conns = []
@@ -55,12 +56,42 @@ def K_calculator(trajects, critical_connections, all_connections):
 
 
 
+def get_startset(n, mode, trajects_db):
+    """
+    Creates a starting set of n trajects to use for e.g. a hillclimber. Mode should be 'random', 'last' or 'first'.
+    and applies to which trajects from the traject database will be used.
+    """
+    start_set = {}
+    trajects_db = list(trajects_db.values())
+    ln = len(trajects_db)
+
+    if mode == 'first':
+        for i in range(n):
+            traject = trajects_db[i]
+            start_set[i] = traject
+
+    elif mode == 'random':
+
+        for i in range(n):
+            j = random.randint(0,ln)
+            traject = trajects_db[j]
+            start_set[i] = traject
+
+    elif mode == 'last':
+        for i in range(n):
+            traject = trajects_db[-1-i]
+            start_set[i] = traject
+
+    return(start_set)
+
+
+
 def get_trajects_from_csv(trajects_db_csv):
     """
-    Reads a csv file containing all possible trajects and returns all trajects
-    as a list without keys. This is way we can get quicker access to the
-    trajects database and it is no longer necessary to recreate the database
-    everytime we want to use it the breadthfirst traject_generator algorithm.
+    Reads a csv file containing all possible trajects and returns all trajects as a list without keys.
+    This is way we can get quicker access to the trajects database,
+    and it is no longer necessary to recreate the database.
+    Unfortunately it is useless as it only returns strings.
     """
     csv_output = []
     with open(trajects_db_csv, newline='') as c:

@@ -20,7 +20,7 @@ from greedy import traject_generator_Greedy_new
 from hillclimber_basic import hillclimber
 from hillclimber_SA import hillclimber_SA
 from breadthfirst import traject_generator_BF
-from helpers import Stack, K_calculator, get_trajects_from_csv
+from helpers import Stack, K_calculator, get_trajects_from_csv, get_startset
 from plot_stations import traj_plot
 
 
@@ -30,48 +30,36 @@ CONNECTIONS_NH = 'data/ConnectiesHolland.csv'
 STATIONS_NL = 'data/StationsNationaal.csv'
 CONNECTIONS_NL = 'data/ConnectiesNationaal.csv'
 
-#
-# NH = Map(STATIONS_NH, CONNECTIONS_NH)
-# NH.load_stations()
-# NH.load_connections()
+
+NH = Map(STATIONS_NH, CONNECTIONS_NH)
+NH.load_stations()
+NH.load_connections()
 
 NL = Map(STATIONS_NL, CONNECTIONS_NL)
 NL.load_stations()
 NL.load_connections()
 
 
-trajects_db_NL = traject_generator_BF(NL.all_connections, 180)
+trajects_db_NH = traject_generator_greedy(NH, 1000, 20)
 # i = len(trajects_db_NL)//2
 # tr = list(trajects_db_NL.values())[i]
 # traj_plot(tr, NL, i)
 
 
 
-#  create a starting set of 15 trajects to use for the hillclimber
-start_set = {}
-for i in range(15):
-    traject = trajects_db[-1-i]
-    start_set[i] = traject
+start_set = get_startset(5, 'last', trajects_db_NH)
+print(start_set)
 
 
-final = hillclimber(start_set, 20, trajects_list_NL, 1000, NL.critical_connections, NL.all_connections)
-print(f"finalset = {final}")
-print(K_calculator(final, NL.critical_connections, NL.all_connections))
-print(f"start_set = {start_set}")
-print(K_calculator(start_set, NL.critical_connections, NL.all_connections))
 
-
+def K_barchart():
+    
 
 #
 # traject_voor_jasper = list(trajects_db.values())[61]
 # all_plot(traject_voor_jasper.connections)
 #
-# #  create a starting set of 3 trajects to use for the hillclimber
-# start_set = {}
-# for i in range(5):
-#     traject = list(trajects_db.values())[i]
-#     start_set[i] = traject
-#
+
 # final = hillclimber(start_set, trajects_db, 7, 1000, critical_connections, all_connections)
 #
 # print(f"finalset = {final}")
