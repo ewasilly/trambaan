@@ -13,8 +13,6 @@ def traject_generator_BF(connections, max_minutes):
     # length of connections = the nr of connections
     len_all = len(connections)
 
-    # build a stack to prevent to ensure use of all connections
-    stack_all = h.Stack(connections)
     # this stack will be used for starting connections
     stack_start = h.Stack(connections)
 
