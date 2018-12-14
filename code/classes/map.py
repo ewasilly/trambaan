@@ -1,5 +1,5 @@
 """
-Put in the stations and connections csv of choice (either Noordholland or Holland) and all data will be loaded in.
+Put in the stations and connections csv of choice (either Noord-Holland or Holland) and all data will be loaded in.
 map = tuple(stations.csv, connections.csv)
 """
 import csv
