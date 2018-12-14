@@ -1,16 +1,14 @@
-
-'''
-This traject generator creates an arbitrary amount of trajects and returns a traject_database (dictionary)
-The key is contains startconnection and total_time. This way, trajects that are identical will be overwritten
-resulting in no duplicates in the traject database.
-'''
-
 import helpers as h
 import random
 from code.classes.traject import Traject
 
 def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajects, min_time):
-
+    """
+    This traject generator creates an arbitrary amount of trajects and returns
+    a traject_database (dictionary). The key is a startconnection and
+    total_time. This way, trajects that are identical will be overwritten
+    resulting in no duplicates in the traject database.
+    """
     # this will be the output dictionary
     trajects_db = {}
     # length of connections = the nr of connections
@@ -56,14 +54,3 @@ def traject_generator_Greedy_new(connections, critical_connections, nr_of_trajec
                 break
 
     return(trajects_db)
-
-
-
-"""""
-If it is intended to save the traject_db, execute the following code
-"""""
-
-# with open('traject_db.csv', 'w') as f:
-#     w = csv.DictWriter(f, fieldnames=trajects_db.keys())
-#     w.writeheader()
-#     w.writerow(trajects_db)

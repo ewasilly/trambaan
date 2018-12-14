@@ -8,8 +8,10 @@ class Stack():
     def __init__(self, array):
         self.array = array
 
-    #  takes first item and puts it back at the end of the array
     def take(self):
+        """
+        Repositions the first item of the array to the end of the array.
+        """
         taken = self.array[0]
         self.array.pop(0)
         self.array.append(taken)
@@ -22,6 +24,9 @@ class Stack():
 
 
 def K_calculator(trajects, critical_connections, all_connections):
+    """
+    Calculates the K-value of a given combination of trajectories
+    """
 
     used_conns = []
     used_crit = []
@@ -52,9 +57,10 @@ def K_calculator(trajects, critical_connections, all_connections):
 
 def get_trajects_from_csv(trajects_db_csv):
     """
-    This function reads a csv file containing all possible trajects and returns all trajects as a list without keys.
-    This is way we can get quicker access to the trajects database than by creating the trajects_db everytime with
-    the breadthfirst traject_generator algorithm.
+    Reads a csv file containing all possible trajects and returns all trajects
+    as a list without keys. This is way we can get quicker access to the
+    trajects database and it is no longer necessary to recreate the database
+    everytime we want to use it the breadthfirst traject_generator algorithm.
     """
     csv_output = []
     with open(trajects_db_csv, newline='') as c:

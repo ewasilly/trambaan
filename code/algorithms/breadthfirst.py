@@ -1,12 +1,12 @@
-"""
-This traject generator uses a breadth first approach to generate all possible trajects with the given connections.
-"""
-
 import helpers as h
 from code.classes.traject import Traject
 import copy
 
 def traject_generator_BF(connections, max_minutes):
+    """
+    This traject generator uses a breadth first approach to generate all
+    possible trajects with the given connections.
+    """
 
     # this will be the output dictionary
     trajects_db = {}
