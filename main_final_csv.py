@@ -1,14 +1,7 @@
 """
 The current script:
 
->>> Loads in all Connections en Stations
->>> Declares the lists: stations_ids,  all_connections,  critical_connections
->>> defines the class Stack()
->>> defines K_calculator()
-    >>>>> Is able to call the algoritms in the folder trambaan/code/algoritms
 
-
-hieronder staat nu breadth first van wuter
 """
 
 import csv

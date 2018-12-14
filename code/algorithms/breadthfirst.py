@@ -50,6 +50,7 @@ def traject_generator_BF(connections, max_minutes):
                     j += 1
                 else:
                     # add this new traject to the temporary traject database with its unique key
+                    print(new_traject)
                     temp_trajects_db[f"Traject{new_traject.visited_ids}-{new_traject.total_time}"] = new_traject
                     j += 1
 
