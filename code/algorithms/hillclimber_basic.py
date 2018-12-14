@@ -50,6 +50,7 @@ def hillclimber(map, startset, trajects_database, iterations, max_nr_of_trajects
             K_distribution[i] = new_K
         i += 1
 
+
     if plot == 'plotON':
         # plot linechart of K values
         plt.plot(K_distribution.keys(), K_distribution.values())
@@ -58,6 +59,8 @@ def hillclimber(map, startset, trajects_database, iterations, max_nr_of_trajects
         plt.title(f"K spread Stochastic hillclimber - {iterations} iterations - {map}")
         plt.show()
 
+
     final_set = startset
+    print(final_set)
 
     return(final_set)

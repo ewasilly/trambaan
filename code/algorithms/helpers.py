@@ -49,10 +49,10 @@ def K_calculator(trajects, critical_connections, all_connections):
     t = len(trajects.keys())
     total_minutes = sum(total_minutes)
     K = p*10000 - (t*20 + (total_minutes/10))
-
-    print(f"F: {f}")
-    print(f"P: {p}")
-    print(f"K: {K}\n")
+    # 
+    # print(f"F: {f}")
+    # print(f"P: {p}")
+    # print(f"K: {K}\n")
 
     return(K)
 

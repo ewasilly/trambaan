@@ -50,9 +50,9 @@ def hillclimber_SA(map, startset, trajects_database, max_nr_of_trajects, plot):
                 startset = tempset
                 K_distribution[iterations] = new_K
 
-            # after all trajects where tried as a change, go try changing the next index
-            change_index += 1
             iterations += 1
+        # after all trajects where tried as a change, go try changing the next index
+        change_index += 1
 
     if plot == 'plotON':
         # plot linechart of K values
@@ -63,5 +63,7 @@ def hillclimber_SA(map, startset, trajects_database, max_nr_of_trajects, plot):
         plt.show()
 
     final_set = startset
+    print(final_set)
+
 
     return(final_set)
