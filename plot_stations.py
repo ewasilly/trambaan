@@ -37,12 +37,8 @@ def traj_plot(tr, map, traject_nr):
     coordinates_dict = {}
     critical_dict = {}
     for station in list(map.stations_dict.values()):
-        if station.critical == True:
-            critical_dict[station.name] = (float(station.coordinates[1]),
-                                           float(station.coordinates[0]))
-        else:
-            coordinates_dict[station.name] = (float(station.coordinates[1]),
-                                              float(station.coordinates[0]))
+        coordinates_dict[station.name] = (float(station.coordinates[1]),
+                                          float(station.coordinates[0]))
 
     conn_plot_list = []
     if isinstance(tr, list):
@@ -56,15 +52,17 @@ def traj_plot(tr, map, traject_nr):
         make_plottable(tr, map, conn_plot_list)
 
     G = nx.Graph()
-
+    print(c_dict)
     # Adding all stations, plotting
     G.add_nodes_from(coordinates_dict)
-    nx.draw_networkx(G, pos=critical_dict, node_color='b')
+    nx.draw_networkx_nodes(G, critical_dict, node_color='b', node_size=20)
+    nx.draw_networkx_nodes(G, pos=coordinates_dict, node_color='r', node_size=20)
     if plot_multiple == True:
         # Plot each traject in random color
         for traj_plot_list in conn_plot_list:
+            print(traj_plot_list)
             color = "#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
-            nx.draw_networkx(G, pos=coordinates_dict, edgelist=traj_plot_list,
+            nx.draw_networkx_edges(G, pos=coordinates_dict, edgelist=traj_plot_list,
                              with_labels=False, node_size=20, edge_color = color,
                              width=3)
     else:
