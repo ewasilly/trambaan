@@ -5,11 +5,12 @@ import helpers as h
 
 def hillclimber_SA(startset, trajects_database, max_nr_of_trajects):
     """
-    This STEEPEST ASCENT hillclimber takes a startset with an arbitrary amount of trajects, aswell as the trajects database.
-    For each iteration it takes a traject from the database and evaluates the effect of adding it into a temporary copy of the startset.
-    You can specify how much trajects you maximally want in the final set.
-    If adding an extra traject to your startset results in a higher K value. This change will be accepted aswell.
-
+    This steepest ascent hillclimber takes as arguements a startset with an
+    arbitrary amount of trajects, as well as the trajects database. During each
+    iteration it takes a random trajectory from the database and evaluates the effect
+    of adding it into a temporary copy of the startset. It is possible to
+    specify how much trajects you maximally want in the final set. Using this
+    algorithm does not ensure usage of all trajects in the database.
     """
     # create a stack of the trajects database
     possible_trajects = list(trajects_database.values())

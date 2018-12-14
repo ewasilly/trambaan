@@ -1,13 +1,3 @@
-
-"""""
-Steepest ascent!
-
-This hillclimber takes a startset with an arbitrary amount of trajects, aswell as a trajects database.
-It takes a traject from the database and evaluates the effect of adding it into a temporary copy of the startset.
-You can specify how much trajects you maximally want in the final set.
-If adding an extra traject to your startset results in a higher K value. This change will be accepted aswell.
-
-"""""
 import helpers as h
 import random
 import copy
@@ -15,6 +5,14 @@ import copy
 
 def hillclimber(startset, max_nr_of_trajects, trajects_database, iterations, critical_connections, connections):
 
+    """""
+    This hillclimber takes as arguements a startset with an arbitrary amount of
+    trajects, as well as a trajects database. It takes a traject from the 
+    database and evaluates the effect of adding it into a temporary copy of the startset.
+    You can specify how much trajects you maximally want in the final set.
+    If adding an extra traject to your startset results in a higher K value. This change will be accepted aswell.
+
+    """""
     # create a stack of the trajects database
     possible_trajects = list(trajects_database.values())
     stack = h.Stack(possible_trajects)
