@@ -2,12 +2,12 @@ import helpers as h
 from code.classes.traject import Traject
 import copy
 
-def traject_generator_BF(connections, max_minutes):
+def traject_generator_BF(map, max_minutes):
     """
     This traject generator uses a breadth first approach to generate all
     possible trajects with the given connections.
     """
-
+    connections = map.all_connections 
     # this will be the output dictionary
     trajects_db = {}
     # length of connections = the nr of connections

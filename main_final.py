@@ -30,41 +30,41 @@ CONNECTIONS_NH = 'data/ConnectiesHolland.csv'
 STATIONS_NL = 'data/StationsNationaal.csv'
 CONNECTIONS_NL = 'data/ConnectiesNationaal.csv'
 
-#
-# NH = Map(STATIONS_NH, CONNECTIONS_NH)
-# NH.load_stations()
-# NH.load_connections()
 
-NL = Map(STATIONS_NL, CONNECTIONS_NL)
-NL.load_stations()
-NL.load_connections()
+NH = Map(STATIONS_NH, CONNECTIONS_NH)
+NH.load_stations()
+NH.load_connections()
+
+# NL = Map(STATIONS_NL, CONNECTIONS_NL)
+# NL.load_stations()
+# NL.load_connections()
 
 
-trajects_db_NL = traject_generator_BF(NL, 180)
+trajects_db_NH = traject_generator_greedy(NH, 10000, 1)
 # i = len(trajects_db_NL)//2
 # tr = list(trajects_db_NL.values())[i]
 # traj_plot(tr, NL, i)
 
 
 for i in range(5):
-    start_set = get_startset(3, 'first', trajects_db_NL)
+    start_set = get_startset(3, 'first', trajects_db_NH)
     print(start_set)
 
-    hillclimber(NL, start_set, trajects_db_NL, 10000, 20, 'plotON')
+    hillclimber(NH, start_set, trajects_db_NH, 10000, 7, 'plotON')
 
 print(start_set)
-hillclimber_SA(NL, start_set, trajects_db_NL, 20, 'plotON')
+hillclimber_SA(NH, start_set, trajects_db_NH, 7, 'plotON')
 
 print("RANDOM")
 
 for i in range(5):
-    start_set = get_startset(2, 'random', trajects_db_NL)
+    start_set = get_startset(2, 'random', trajects_db_NH)
     print(start_set)
 
-    hillclimber(NL, start_set, trajects_db_NL, 10000, 20, 'plotON')
+    hillclimber(NH, start_set, trajects_db_NH, 10000, 7, 'plotON')
 
 print(start_set)
-hillclimber_SA(NL, start_set, trajects_db_NL, 20, 'plotON')
+hillclimber_SA(NH, start_set, trajects_db_NH, 7, 'plotON')
 
 
 
