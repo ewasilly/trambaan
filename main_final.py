@@ -16,7 +16,7 @@ from traject import Traject
 from connection import Connection
 from map import Map
 sys.path.insert(1, 'code/algorithms/')
-from greedy import traject_generator_Greedy_new
+from greedy import traject_generator_greedy
 from hillclimber_basic import hillclimber
 from hillclimber_SA import hillclimber_SA
 from breadthfirst import traject_generator_BF
@@ -35,9 +35,9 @@ NH = Map(STATIONS_NH, CONNECTIONS_NH)
 NH.load_stations()
 NH.load_connections()
 
-NL = Map(STATIONS_NL, CONNECTIONS_NL)
-NL.load_stations()
-NL.load_connections()
+# NL = Map(STATIONS_NL, CONNECTIONS_NL)
+# NL.load_stations()
+# NL.load_connections()
 
 
 trajects_db_NH = traject_generator_greedy(NH, 1000, 20)
@@ -46,14 +46,14 @@ trajects_db_NH = traject_generator_greedy(NH, 1000, 20)
 # traj_plot(tr, NL, i)
 
 
+for i in range(3):
+    start_set = get_startset(5, 'random', trajects_db_NH)
+    print(start_set)
 
-start_set = get_startset(5, 'last', trajects_db_NH)
-print(start_set)
+    hillclimber(NH, start_set, trajects_db_NH, 1000, 7, 'plotON')
 
+    hillclimber_SA(NH, start_set, trajects_db_NH, 7, 'plotON')
 
-
-def K_barchart():
-    
 
 #
 # traject_voor_jasper = list(trajects_db.values())[61]
@@ -81,12 +81,6 @@ def K_barchart():
 #     K = K_calculator(final, critical_connections, all_connections)
 #     K_dist.append(K)
 #
-#
-#
-#
-# plt.hist(K_dist, bins=50)
-# plt.title("K spread Stochastic hillclimber - 1000 iterations - startset 3 trajects")
-# plt.show()
 
 
 

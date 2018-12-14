@@ -4,15 +4,17 @@ All helping functions
 
 import collections
 import csv
+import random
 
 class Stack():
+    """
+    Repositions the first item of the array to the end of the array.
+    """
+
     def __init__(self, array):
         self.array = array
 
     def take(self):
-        """
-        Repositions the first item of the array to the end of the array.
-        """
         taken = self.array[0]
         self.array.pop(0)
         self.array.append(taken)
