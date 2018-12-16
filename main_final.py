@@ -19,6 +19,7 @@ sys.path.insert(1, 'code/algorithms/')
 from greedy import traject_generator_greedy
 from hillclimber_basic import hillclimber
 from hillclimber_SA import hillclimber_SA
+from hillclimber_SA2 import hillclimber_SA2
 from breadthfirst import traject_generator_BF
 from helpers import Stack, K_calculator, get_trajects_from_csv, get_startset
 from plot_stations import traj_plot
@@ -31,40 +32,35 @@ STATIONS_NL = 'data/StationsNationaal.csv'
 CONNECTIONS_NL = 'data/ConnectiesNationaal.csv'
 
 
-NH = Map(STATIONS_NH, CONNECTIONS_NH)
-NH.load_stations()
-NH.load_connections()
+# NH = Map(STATIONS_NH, CONNECTIONS_NH)
+# NH.load_stations()
+# NH.load_connections()
 
-# NL = Map(STATIONS_NL, CONNECTIONS_NL)
-# NL.load_stations()
-# NL.load_connections()
+NL = Map(STATIONS_NL, CONNECTIONS_NL)
+NL.load_stations()
+NL.load_connections()
 
 
-trajects_db_NH = traject_generator_greedy(NH, 10000, 1)
+# trajects_db_NL = traject_generator_greedy(NL, 100000, 1, 180)
+trajects_db_NL = traject_generator_BF(NL, 180)
+db_size =len(trajects_db_NL)
+print(db_size)
 # i = len(trajects_db_NL)//2
 # tr = list(trajects_db_NL.values())[i]
 # traj_plot(tr, NL, i)
 
 
-for i in range(5):
-    start_set = get_startset(3, 'first', trajects_db_NH)
-    print(start_set)
+K_dist = []
+for i in range(10):
+    start_set = get_startset(1, 'random', trajects_db_NL)
+    final = hillclimber_SA2(NL, start_set, trajects_db_NL, 20, 'plotON')
+    K = K_calculator(final, NL.critical_connections, NL.all_connections)
+    K_dist.append(K)
 
-    hillclimber(NH, start_set, trajects_db_NH, 10000, 7, 'plotON')
 
-print(start_set)
-hillclimber_SA(NH, start_set, trajects_db_NH, 7, 'plotON')
-
-print("RANDOM")
-
-for i in range(5):
-    start_set = get_startset(2, 'random', trajects_db_NH)
-    print(start_set)
-
-    hillclimber(NH, start_set, trajects_db_NH, 10000, 7, 'plotON')
-
-print(start_set)
-hillclimber_SA(NH, start_set, trajects_db_NH, 7, 'plotON')
+plt.hist(K_dist, bins=10)
+plt.ylabel(f"K spread finalset by SA hillclimber - BFsetsize: {db_size}")
+plt.show()
 
 
 
@@ -72,11 +68,6 @@ hillclimber_SA(NH, start_set, trajects_db_NH, 7, 'plotON')
 
 
 
-# #  Create a trajects database for NL and save as csv
-# with open('alltrajectsNH120.csv', 'w') as f:
-#     w = csv.DictWriter(f, fieldnames=trajects_db.keys())
-#     w.writeheader()
-#     w.writerow(trajects_db)
 #
 # NHcsv = 'alltrajectsNH120.csv'
 # NLcsv = 'alltrajectsNL180.csv'

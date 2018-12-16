@@ -2,7 +2,7 @@ import helpers as h
 import random
 from code.classes.traject import Traject
 
-def traject_generator_greedy(map, iterations, min_time):
+def traject_generator_greedy(map, iterations, min_time, max_time):
     """
     This traject generator creates an arbitrary amount of trajects of a minimal time duration
     and returns a traject_database (dictionary).
@@ -39,7 +39,7 @@ def traject_generator_greedy(map, iterations, min_time):
 
             time_before = traject.total_time
             for j in range(len_crit):
-                # Look at traject add_connection >> this is where the greedy aspect comes in
+                # try adding a critical connection first
                 traject.add_connection(stack_crit.take())
                 tries += 1
                 traject.add_connection(stack_all.take())
@@ -48,7 +48,11 @@ def traject_generator_greedy(map, iterations, min_time):
             rounds += 1
             shuffle_stacks()
 
+            if time_after > max_time:
+                break
+
             if time_after > min_time:
+                print(traject)
                 trajects_db[f"Traject{start_connection}-{traject.total_time}"]= traject
                 i += 1
 

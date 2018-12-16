@@ -31,7 +31,7 @@ We have determined the following statespace:
     - a_m = number of connections that fit into 120 minutes
     - t = number of maximal trajectoreies
 
-- Louwer bound:
+- Lower bound:
 **l = c_crit**
 
     - l = lower bound

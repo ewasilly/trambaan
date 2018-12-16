@@ -4,7 +4,7 @@ import copy
 import matplotlib.pyplot as plt
 
 
-def hillclimber_SA(map, startset, trajects_database, max_nr_of_trajects, plot):
+def hillclimber_SA2(map, startset, trajects_database, max_nr_of_trajects, plot):
     """
     This steepest ascent hillclimber takes as arguements a startset with an
     arbitrary amount of trajects, as well as the trajects database. Systematically each traject
@@ -26,6 +26,7 @@ def hillclimber_SA(map, startset, trajects_database, max_nr_of_trajects, plot):
     # keep track of K-values for plots
     K_distribution = {}
     iterations = 0
+
 
     print(f"startset: {startset}")
 
@@ -50,6 +51,8 @@ def hillclimber_SA(map, startset, trajects_database, max_nr_of_trajects, plot):
             # if the change results in higher K update startset
             if new_K > old_K:
                 startset = tempset
+                # make sure that the traject will not be used in the set twice
+                stack.remove(new_traject)
                 K_distribution[iterations] = new_K
 
             iterations += 1
