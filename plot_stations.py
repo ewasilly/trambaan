@@ -12,6 +12,7 @@ def make_plottable(tr, map, plot_list):
     """
     This function takes all connections from tr and adds them to plot_list.
     tr is a Traject object
+    map is which Map is used
     plot_list is a list of connections
     """
 
@@ -52,17 +53,13 @@ def traj_plot(tr, map, traject_nr):
         make_plottable(tr, map, conn_plot_list)
 
     G = nx.Graph()
-    print(c_dict)
     # Adding all stations, plotting
-    G.add_nodes_from(coordinates_dict)
-    nx.draw_networkx_nodes(G, critical_dict, node_color='b', node_size=20)
-    nx.draw_networkx_nodes(G, pos=coordinates_dict, node_color='r', node_size=20)
+    G.add_nodes_from(coordinates_dict, color='b')
     if plot_multiple == True:
         # Plot each traject in random color
         for traj_plot_list in conn_plot_list:
-            print(traj_plot_list)
             color = "#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
-            nx.draw_networkx_edges(G, pos=coordinates_dict, edgelist=traj_plot_list,
+            nx.draw_networkx(G, pos=coordinates_dict, edgelist=traj_plot_list,
                              with_labels=False, node_size=20, edge_color = color,
                              width=3)
     else:

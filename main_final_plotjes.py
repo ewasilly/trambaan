@@ -19,6 +19,7 @@ sys.path.insert(1, 'code/algorithms/')
 from greedy import traject_generator_greedy
 from hillclimber_basic import hillclimber
 from hillclimber_SA import hillclimber_SA
+from hillclimber_SA2 import hillclimber_SA2
 from breadthfirst import traject_generator_BF
 from helpers import Stack, K_calculator, get_trajects_from_csv, get_startset
 from plot_stations import traj_plot
@@ -39,16 +40,37 @@ NH.load_connections()
 # NL.load_stations()
 # NL.load_connections()
 
-#
-# trajects_db_NH = traject_generator_greedy(NH, 10000, 1)
 
-
-
-
-trajects_db = traject_generator_BF(NH, 120)
-i = len(trajects_db)//2
-tr = []
-for j in range(7):
-    traj = list(trajects_db.values())[i+20]
-    tr.append(traj)
+# trajects_db_NL = traject_generator_greedy(NL, 100000, 1, 180)
+trajects_db_NH = traject_generator_BF(NH, 180)
+db_size =len(trajects_db_NH)
+print(db_size)
+i = len(trajects_db_NH)//2
+tr = list(trajects_db_NH.values())[i:i+5]
 traj_plot(tr, NH, i)
+
+
+K_dist = []
+for i in range(10):
+    start_set = get_startset(1, 'random', trajects_db_NL)
+    final = hillclimber_SA2(NL, start_set, trajects_db_NL, 20, 'plotON')
+    K = K_calculator(final, NL.critical_connections, NL.all_connections)
+    K_dist.append(K)
+
+
+plt.hist(K_dist, bins=10)
+plt.ylabel(f"K spread finalset by SA hillclimber - BFsetsize: {db_size}")
+plt.show()
+
+
+
+
+
+
+
+#
+# NHcsv = 'alltrajectsNH120.csv'
+# NLcsv = 'alltrajectsNL180.csv'
+#
+# trajects_list_NL = get_trajects_from_csv(NLcsv)
+# print(trajects_list_NL[58])
