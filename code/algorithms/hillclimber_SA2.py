@@ -7,10 +7,12 @@ import matplotlib.pyplot as plt
 def hillclimber_SA2(map, startset, trajects_database, max_nr_of_trajects, plot):
     """
     This steepest ascent hillclimber takes as arguements a startset with an
-    arbitrary amount of trajects, as well as the trajects database. Systematically each traject
-    from the database will be added in the startset and the effect on K-value will be evaluated.
-    The max_nr_of_trajects parameter specifies how much trajects you maximally want in the final set.
-    The plot parameter must be 'plotON' depending on whether or not a plot should be generated.
+    arbitrary amount of trajects, as well as the trajects database.
+    Systematically each traject from the database will be added in the startset
+    and the effect on K-value will be evaluated. The max_nr_of_trajects
+    parameter specifies how much trajects you maximally want in the final set.
+    The plot parameter must be 'plotON' depending on whether or not a plot
+    should be generated.
     """
 
     critical_connections = map.critical_connections
