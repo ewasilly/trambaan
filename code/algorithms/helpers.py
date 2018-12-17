@@ -52,10 +52,6 @@ def K_calculator(trajects, critical_connections, all_connections):
     t = len(trajects.keys())
     total_minutes = sum(total_minutes)
     K = p*10000 - (t*20 + (total_minutes/10))
-    #
-    # print(f"F: {f}")
-    # print(f"P: {p}")
-    # print(f"K: {K}\n")
 
     return(K)
 
@@ -105,7 +101,6 @@ def get_trajects_from_csv(trajects_db_csv):
             traject = row
             csv_output.append(traject)
 
-    # keys = csv_output[0]
     trajects_list = csv_output[1]
 
     return(trajects_list)

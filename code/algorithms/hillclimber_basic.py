@@ -61,6 +61,5 @@ def hillclimber(map, startset, trajects_database, iterations, max_nr_of_trajects
 
 
     final_set = startset
-    print(final_set)
 
     return(final_set)
