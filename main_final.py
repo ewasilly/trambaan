@@ -51,9 +51,9 @@ print(db_size)
 
 
 K_dist = []
-for i in range(10):
-    start_set = get_startset(1, 'random', trajects_db_NL)
-    final = hillclimber_SA2(NL, start_set, trajects_db_NL, 20, 'plotON')
+for i in range(1000):
+    start_set = get_startset(10, 'random', trajects_db_NL)
+    final = hillclimber_SA2(NL, start_set, trajects_db_NL, 20, 'plotOFF')
     K = K_calculator(final, NL.critical_connections, NL.all_connections)
     K_dist.append(K)
 

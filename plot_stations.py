@@ -1,6 +1,6 @@
 # Team Trambaan
 # Made for the course Heuristieken
-# This file containsa funtion that plots a traject
+# This file contains a funtion that plots a traject
 
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -16,6 +16,7 @@ def make_plottable(tr, map, plot_list):
     plot_list is a list of connections
     """
 
+    # Change to list for easier manipulation
     list_of_connections = list(tr.connections)
 
     for conn in list_of_connections:
@@ -41,9 +42,11 @@ def traj_plot(tr, map, traject_nr):
         coordinates_dict[station.name] = (float(station.coordinates[1]),
                                           float(station.coordinates[0]))
 
+    # Check if more than one traject
     conn_plot_list = []
     if isinstance(tr, list):
         plot_multiple = True
+        # Add to list of trajects to be plotted
         for traj in tr:
             new_plot_list = []
             make_plottable(traj, map, new_plot_list)
@@ -62,6 +65,7 @@ def traj_plot(tr, map, traject_nr):
             nx.draw_networkx(G, pos=coordinates_dict, edgelist=traj_plot_list,
                              with_labels=False, node_size=20, edge_color = color,
                              width=3)
+    # If just one traject, plot that one in black
     else:
         nx.draw_networkx(G, pos=coordinates_dict, edgelist=conn_plot_list,
                          with_label=False, node_size=20, width=3)
@@ -69,7 +73,3 @@ def traj_plot(tr, map, traject_nr):
     plt.xlabel("Breedtegraad")
     plt.ylabel("Lengtegraad")
     plt.show()
-
-
-if __name__ == "__main__":
-    all_plot([(0,1)])
