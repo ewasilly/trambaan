@@ -1,10 +1,16 @@
 """
-All helping functions
+All helping functions:
+- Stack
+- K_calculator
+- get_startset
+- get_trajects_from_csv
+
 """
 
 import collections
 import csv
 import random
+
 
 class Stack():
     """
@@ -31,7 +37,7 @@ class Stack():
 
 def K_calculator(trajects, critical_connections, all_connections):
     """
-    Calculates the K-value of a given set of trajectories
+    Calculates the K-value of a given set of trajects
     """
 
     used_conns = []
@@ -63,24 +69,24 @@ def get_startset(n, mode, trajects_db):
     and applies to which trajects from the traject database will be used.
     """
     start_set = {}
-    trajects_db = list(trajects_db.values())
-    ln = len(trajects_db)
+    trajects = list(trajects_db.values())
+    ln = len(trajects)-1
 
     if mode == 'first':
         for i in range(n):
-            traject = trajects_db[i]
+            traject = trajects[i]
             start_set[i] = traject
 
     elif mode == 'random':
 
         for i in range(n):
             j = random.randint(0,ln)
-            traject = trajects_db[j]
+            traject = trajects[j]
             start_set[i] = traject
 
     elif mode == 'last':
         for i in range(n):
-            traject = trajects_db[-1-i]
+            traject = trajects[-1-i]
             start_set[i] = traject
 
     return(start_set)
@@ -93,6 +99,7 @@ def get_trajects_from_csv(trajects_db_csv):
     This is way we can get quicker access to the trajects database,
     and it is no longer necessary to recreate the database.
     Unfortunately it is useless as it only returns strings.
+    But its nice to see all trajects if thats what you are interested in.
     """
     csv_output = []
     with open(trajects_db_csv, newline='') as c:
